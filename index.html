@@ -160,10 +160,9 @@
       display: flex;
       width: 100%;
       max-width: 1000px;
-      height: 400px;
+      height: 500px;
       margin: 0 auto;
       overflow: hidden;
-      animation: fadeIn 1s ease-in;
       position: relative;
     }
     .binary-side, .forex-side {
@@ -176,19 +175,26 @@
       text-shadow: 0 0 8px rgba(0, 0, 0, 0.9);
       position: relative;
       transition: transform 0.3s, box-shadow 0.3s;
+      opacity: 0;
+    }
+    .binary-side.visible {
+      animation: slideInRight 1s ease-out forwards;
+      opacity: 1;
+    }
+    .forex-side.visible {
+      animation: slideInLeft 1s ease-out forwards;
+      opacity: 1;
     }
     .binary-side {
       background: url('https://images.unsplash.com/photo-1593672715438-d88a70629abe?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80') no-repeat center center;
       background-size: cover;
       clip-path: polygon(0 0, 100% 0, 80% 100%, 0 100%);
-      animation: slideInLeft 1s ease-out;
       z-index: 2;
     }
     .forex-side {
       background: url('https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80') no-repeat center center;
       background-size: cover;
       clip-path: polygon(20% 0, 100% 0, 100% 100%, 0 100%);
-      animation: slideInRight 1s ease-out;
       z-index: 1;
     }
     .binary-side::before, .forex-side::before {
@@ -369,8 +375,9 @@
       .binary-side, .forex-side {
         flex: none;
         width: 100%;
-        height: 300px;
+        height: 350px;
         clip-path: none;
+        opacity: 1;
         animation: none;
       }
       .binary-side {
@@ -421,12 +428,12 @@
       0% { opacity: 0; transform: translateY(20px); }
       100% { opacity: 1; transform: translateY(0); }
     }
-    @keyframes slideInLeft {
-      0% { transform: translateX(-50%); opacity: 0; }
+    @keyframes slideInRight {
+      0% { transform: translateX(-100%); opacity: 0; }
       100% { transform: translateX(0); opacity: 1; }
     }
-    @keyframes slideInRight {
-      0% { transform: translateX(50%); opacity: 0; }
+    @keyframes slideInLeft {
+      0% { transform: translateX(100%); opacity: 0; }
       100% { transform: translateX(0); opacity: 1; }
     }
   </style>
@@ -575,6 +582,23 @@
       }
     }
     setTimeout(typeInfo, 1000);
+
+    // Versus Section Animation on Scroll
+    const versusContainer = document.querySelector('.versus-container');
+    const binarySide = document.querySelector('.binary-side');
+    const forexSide = document.querySelector('.forex-side');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          binarySide.classList.add('visible');
+          forexSide.classList.add('visible');
+          observer.unobserve(versusContainer);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    observer.observe(versusContainer);
   </script>
 </body>
 </html>
