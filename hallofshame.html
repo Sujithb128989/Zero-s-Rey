@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hall of Shame</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@700&family=Source+Code+Pro&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Source Code Pro', monospace;
+      scroll-behavior: smooth;
+    }
+    body {
+      background: #000000;
+      color: #cccccc;
+      overflow-x: hidden;
+    }
+    header {
+      background: rgba(0, 0, 0, 0.9);
+      padding: 0.6rem 0.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      width: 100%;
+      z-index: 10;
+      backdrop-filter: blur(8px);
+    }
+    .logo {
+      height: 35px;
+      width: auto;
+      transition: transform 0.3s;
+      cursor: pointer;
+    }
+    .logo:hover {
+      transform: scale(1.1);
+    }
+    nav {
+      display: flex;
+      align-items: center;
+    }
+    nav a {
+      color: #666666;
+      text-decoration: none;
+      margin: 0 0.5rem;
+      font-size: 1rem;
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: #999999;
+      text-shadow: 0 0 3px rgba(50, 50, 50, 0.5);
+    }
+    nav a.courses {
+      color: #ff0000;
+    }
+    nav a.courses:hover {
+      color: #cc0000;
+      text-shadow: 0 0 3px rgba(50, 50, 50, 0.5);
+    }
+    .hamburger {
+      display: none;
+      font-size: 1.5rem;
+      color: #cccccc;
+      cursor: pointer;
+      z-index: 11;
+      margin-left: 0.5rem;
+    }
+    .hamburger-menu {
+      display: none;
+      position: absolute;
+      top: 50px;
+      right: 0;
+      background: rgba(0, 0, 0, 0.95);
+      width: 180px;
+      padding: 0.8rem 0;
+      z-index: 10;
+      border-radius: 0 0 0 8px;
+    }
+    .hamburger-menu a {
+      display: block;
+      color: #666666;
+      text-decoration: none;
+      padding: 0.6rem 1.5rem;
+      font-size: 1rem;
+      transition: color 0.3s;
+    }
+    .hamburger-menu a:hover {
+      color: #999999;
+      text-shadow: 0 0 3px rgba(50, 50, 50, 0.5);
+    }
+    .hamburger-menu a.courses {
+      color: #ff0000;
+    }
+    .hamburger-menu a.courses:hover {
+      color: #cc0000;
+      text-shadow: 0 0 3px rgba(50, 50, 50, 0.5);
+    }
+    #hamburger-toggle {
+      display: none;
+    }
+    #hamburger-toggle:checked ~ .hamburger-menu {
+      display: block;
+    }
+    .main-section {
+      text-align: center;
+      padding: 4rem 1rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+      margin-bottom: 2rem;
+    }
+    .main-title {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 3.5rem;
+      color: #ff0000;
+      text-shadow: 0 0 8px rgba(50, 50, 50, 0.3);
+      margin-bottom: 1.5rem;
+      animation: fadeIn 2s ease-in;
+    }
+    .main-text {
+      font-size: 1.1rem;
+      color: #999999;
+      max-width: 600px;
+      margin: 0 auto 1.5rem;
+      line-height: 1.5;
+      animation: fadeIn 2.5s ease-in;
+    }
+    .shame-image {
+      max-width: 600px;
+      width: 100%;
+      height: auto;
+      margin: 1rem auto;
+      display: block;
+      box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+      animation: fadeIn 3s ease-in;
+    }
+    .image-caption {
+      font-size: 0.9rem;
+      color: #666666;
+      max-width: 600px;
+      margin: 0 auto 1.5rem;
+      animation: fadeIn 3.5s ease-in;
+    }
+    footer {
+      background: rgba(0, 0, 0, 0.95);
+      padding: 1.2rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #ffffff;
+      text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+      position: relative;
+      border-top: 1px solid #ff0000;
+    }
+    .footer-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .footer-content a {
+      margin-left: 0.8rem;
+      text-decoration: none;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+    }
+    .footer-content a:hover {
+      text-shadow: 0 0 10px rgba(0, 0, 255, 0.5);
+    }
+    .footer-content img {
+      width: 25px;
+      height: 25px;
+      margin-right: 4px;
+      transition: transform 0.3s;
+    }
+    .footer-content img:hover {
+      transform: scale(1.2);
+    }
+    .spotlight-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 100;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    .spotlight-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .spotlight {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, transparent 70%);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .spotlight-text {
+      position: absolute;
+      color: #ffffff;
+      font-size: 0.9rem;
+      text-align: center;
+      max-width: 200px;
+      z-index: 101;
+    }
+    .hidden {
+      display: none;
+    }
+    @media (max-width: 768px) {
+      header {
+        padding: 0.6rem 0.8rem;
+      }
+      .logo {
+        height: 30px;
+      }
+      nav {
+        display: none;
+      }
+      .hamburger {
+        display: block;
+      }
+      .main-section {
+        padding: 3rem 0.8rem;
+        margin-bottom: 1.5rem;
+      }
+      .main-title {
+        font-size: 2.5rem;
+      }
+      .main-text {
+        font-size: 0.9rem;
+        max-width: 90%;
+      }
+      .shame-image {
+        max-width: 90%;
+      }
+      .image-caption {
+        font-size: 0.8rem;
+        max-width: 90%;
+      }
+      footer {
+        padding: 1rem 0.8rem;
+      }
+      .footer-content {
+        flex-direction: column;
+        align-items: center;
+      }
+      .footer-content a {
+        margin: 0.5rem 0;
+      }
+      .footer-content span {
+        margin-bottom: 0.5rem;
+      }
+      .spotlight {
+        width: 80px;
+        height: 80px;
+      }
+      .spotlight-text {
+        font-size: 0.8rem;
+        max-width: 150px;
+      }
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <audio id="background-music" loop>
+    <source src="music/enemy.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+  <div id="spotlight-overlay" class="spotlight-overlay hidden">
+    <div id="spotlight" class="spotlight"></div>
+    <div id="spotlight-text" class="spotlight-text">
+      <p>Clicking the logo will stop music</p>
+    </div>
+  </div>
+  <header>
+    <a href="index.html"><img id="logo" src="https://images5.alphacoders.com/133/1334125.jpeg" alt="Rey Logo" class="logo" onclick="toggleMusic()"></a>
+    <nav>
+      <a href="index.html#home">Home</a>
+      <a href="index.html#courses" class="courses">Courses</a>
+      <a href="index.html#tools">Tools</a>
+      <a href="hall-of-shame.html">Hall of Shame</a>
+    </nav>
+    <input type="checkbox" id="hamburger-toggle" class="hamburger-toggle">
+    <label for="hamburger-toggle" class="hamburger">☰</label>
+    <div class="hamburger-menu">
+      <a href="index.html#home">Home</a>
+      <a href="index.html#courses" class="courses">Courses</a>
+      <a href="index.html#tools">Tools</a>
+      <a href="hall-of-shame.html">Hall of Shame</a>
+    </div>
+  </header>
+  <section class="main-section">
+    <h1 class="main-title">Hall of Shame</h1>
+    <p class="main-text">
+      You have been cast into the Hall of Shame for your dishonorable actions. Your behavior has proven you unworthy of the knowledge and tools offered by Rey. You are expressly forbidden from using this website. Should you dare to defy this ban, you will demonstrate a complete lack of honor and integrity, forever marking yourself as a disgrace in the eyes of this community.
+    </p>
+    <img src="shame.png" alt="Dishonorable Comment" class="shame-image">
+    <p class="image-caption">Evidence of your shameful conduct, preserved for all to see.</p>
+  </section>
+  <footer>
+    <div class="footer-content">
+      <span>© 2025 REY. All rights reserved |</span>
+      <a href="https://t.me/groxmcislitt" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
+        Contact Us
+      </a>
+    </div>
+  </footer>
+  <script>
+    // Disable developer keys
+    document.addEventListener('keydown', function(event) {
+      if (
+        event.key === 'F12' ||
+        (event.ctrlKey && event.shiftKey && event.key === 'I') ||
+        (event.ctrlKey && event.key === 'U') ||
+        (event.ctrlKey && event.key === 'S')
+      ) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    });
+
+    // Music Control
+    const audio = document.getElementById('background-music');
+    const isHallOfShame = window.location.pathname.includes('hall-of-shame.html');
+    let hasInteracted = false;
+
+    function initializeMusic() {
+      const musicState = sessionStorage.getItem('musicState');
+      const musicTime = sessionStorage.getItem('musicTime');
+      const storedTrack = sessionStorage.getItem('musicTrack');
+      const expectedTrack = isHallOfShame ? 'enemy' : 'dreams';
+
+      if (storedTrack !== expectedTrack && storedTrack !== null) {
+        sessionStorage.setItem('musicTrack', expectedTrack);
+        audio.currentTime = 0;
+      } else if (musicState === 'playing' && storedTrack === expectedTrack) {
+        audio.currentTime = parseFloat(musicTime) || 0;
+        hasInteracted = true;
+      } else if (musicState === 'paused') {
+        audio.currentTime = parseFloat(musicTime) || 0;
+        audio.pause();
+      }
+    }
+
+    function startMusic() {
+      if (!hasInteracted) {
+        audio.play().then(() => {
+          sessionStorage.setItem('musicTrack', isHallOfShame ? 'enemy' : 'dreams');
+          sessionStorage.setItem('musicState', 'playing');
+          hasInteracted = true;
+        }).catch(error => {
+          console.log('Music playback failed:', error);
+        });
+      }
+    }
+
+    function toggleMusic() {
+      if (audio.paused) {
+        audio.play().then(() => {
+          sessionStorage.setItem('musicState', 'playing');
+          hasInteracted = true;
+        });
+      } else {
+        audio.pause();
+        sessionStorage.setItem('musicState', 'paused');
+      }
+    }
+
+    audio.addEventListener('timeupdate', () => {
+      sessionStorage.setItem('musicTime', audio.currentTime);
+    });
+
+    audio.addEventListener('play', () => {
+      sessionStorage.setItem('musicState', 'playing');
+    });
+
+    audio.addEventListener('pause', () => {
+      sessionStorage.setItem('musicState', 'paused');
+    });
+
+    ['click', 'mousedown', 'mouseup'].forEach(event => {
+      document.addEventListener(event, startMusic, { once: true });
+    });
+
+    // Spotlight Effect
+    const spotlightOverlay = document.getElementById('spotlight-overlay');
+    const spotlight = document.getElementById('spotlight');
+    const spotlightText = document.getElementById('spotlight-text');
+    const logo = document.getElementById('logo');
+
+    function showSpotlight() {
+      if (!sessionStorage.getItem('spotlightShown')) {
+        const rect = logo.getBoundingClientRect();
+        spotlight.style.left = `${rect.left + rect.width / 2}px`;
+        spotlight.style.top = `${rect.top + rect.height / 2}px`;
+        spotlightText.style.left = `${rect.left + rect.width / 2}px`;
+        spotlightText.style.top = `${rect.top + rect.height + 20}px`;
+        spotlightOverlay.classList.remove('hidden');
+        spotlightOverlay.classList.add('active');
+        sessionStorage.setItem('spotlightShown', 'true');
+      }
+    }
+
+    function closeSpotlight() {
+      spotlightOverlay.classList.remove('active');
+      setTimeout(() => {
+        spotlightOverlay.classList.add('hidden');
+      }, 500);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        initializeMusic();
+        showSpotlight();
+      }, 100);
+    });
+
+    spotlightOverlay.addEventListener('click', closeSpotlight);
+  </script>
+</body>
+</html>
