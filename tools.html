@@ -1,1 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rey - Tools</title>
+  <link rel="icon" type="image/x-icon" href="pics/favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@700&family=Source+Code+Pro&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.waves.min.js"></script>
+  <style>
+    :root {
+      --primary: #ff0000;
+      --primary-dark: #cc0000;
+      --accent: #ff4d4d;
+      --accent-light: #ff6666;
+      --dark: #000000;
+      --darker: #080808;
+      --light: #cccccc;
+      --gray: #222222;
+      --light-gray: #444444;
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      --glow: 0 0 15px rgba(255, 0, 0, 0.8);
+      --neon: 0 0 10px rgba(255, 0, 0, 0.7), 0 0 20px rgba(255, 0, 0, 0.5);
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Source Code Pro', monospace;
+      scroll-behavior: smooth;
+    }
+    body {
+      background: var(--dark);
+      color: var(--light);
+      overflow-x: hidden;
+    }
+    .vanta-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+    header {
+      background: rgba(0, 0, 0, 0.9);
+      padding: 0.6rem 0.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      width: 100%;
+      z-index: 10;
+      backdrop-filter: blur(8px);
+    }
+    .logo {
+      height: 35px;
+      width: auto;
+      transition: transform 0.3s;
+      cursor: pointer;
+    }
+    .logo:hover {
+      transform: scale(1.1);
+    }
+    nav {
+      display: flex;
+      align-items: center;
+    }
+    nav a {
+      color: #666666;
+      text-decoration: none;
+      margin: 0 0.5rem;
+      font-size: 1rem;
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: #999999;
+      text-shadow: 0 0 3px rgba(50, 50, 50, 0.5);
+    }
+    nav a.tools {
+      color: var(--primary);
+    }
+    nav a.tools:hover {
+      color: var(--primary-dark);
+      text-shadow: 0 0 3px rgba(50, 50, 50, 0.5);
+    }
+    .hamburger {
+      display: none;
+      font-size: 1.5rem;
+      color: var(--light);
+      cursor: pointer;
+      z-index: 11;
+      margin-left: 0.5rem;
+    }
+    .hamburger-menu {
+      display: none;
+      position: absolute;
+      top: 50px;
+      right: 0;
+      background: rgba(0, 0, 0, 0.95);
+      width: 180px;
+      padding: 0.8rem 0;
+      z-index: 10;
+      border-radius: 0 0 0 8px;
+    }
+    .hamburger-menu a {
+      display: block;
+      color: #666666;
+      text-decoration: none;
+      padding: 0.6rem 1.5rem;
+      font-size: 1rem;
+      transition: color 0.3s;
+    }
+    .hamburger-menu a:hover {
+      color: #999999;
+      text-shadow: 0 0 3px rgba(50, 50, 50, 0.5);
+    }
+    .hamburger-menu a.tools {
+      color: var(--primary);
+    }
+    .hamburger-menu a.tools:hover {
+      color: var(--primary-dark);
+      text-shadow: 0 0 3px rgba(50, 50, 50, 0.5);
+    }
+    #hamburger-toggle {
+      display: none;
+    }
+    #hamburger-toggle:checked ~ .hamburger-menu {
+      display: block;
+    }
+    .tools-section {
+      padding: 6rem 1rem 3rem;
+      text-align: center;
+      min-height: 100vh;
+      position: relative;
+      z-index: 1;
+    }
+    .section-title {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 2.5rem;
+      color: var(--light);
+      margin-bottom: 2rem;
+      text-shadow: 0 0 8px rgba(50, 50, 50, 0.3);
+    }
+    .typewriter {
+      font-size: 1.1rem;
+      color: var(--accent-light);
+      font-weight: bold;
+      display: inline-block;
+      min-height: 1.6rem;
+      margin-bottom: 2rem;
+    }
+    .service-card-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .service-card {
+      background-color: var(--gray);
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: var(--transition);
+      position: relative;
+      width: 100%;
+    }
+    .service-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+      border-color: var(--accent);
+    }
+    .service-card-popular {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      z-index: 1;
+      box-shadow: 0 3px 10px rgba(255, 0, 0, 0.3);
+    }
+    .service-card-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .service-card-header h3 {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--accent);
+    }
+    .service-card-header p {
+      color: #aaaaaa;
+      font-size: 0.9rem;
+    }
+    .service-card-body {
+      padding: 1.5rem;
+    }
+    .price-tag {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent-light);
+      margin-bottom: 1.5rem;
+    }
+    .features-list {
+      list-style: none;
+      margin-bottom: 2rem;
+    }
+    .features-list li {
+      padding: 0.5rem 0;
+      display: flex;
+      align-items: center;
+      position: relative;
+      padding-left: 1.8rem;
+      color: #cccccc;
+      font-size: 0.9rem;
+    }
+    .features-list li::before {
+      content: '✓';
+      color: var(--accent);
+      position: absolute;
+      left: 0;
+      font-weight: bold;
+    }
+    .service-card-footer {
+      padding: 0 1.5rem 1.5rem;
+    }
+    .btn {
+      padding: 0.9rem 2.2rem;
+      border-radius: 5px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+      box-shadow: var(--neon);
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--glow);
+    }
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.8);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(5px);
+    }
+    .modal-content {
+      background-color: var(--gray);
+      border-radius: 10px;
+      width: 90%;
+      max-width: 800px;
+      max-height: 90vh;
+      overflow-y: auto;
+      border: 1px solid var(--accent);
+      box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
+      animation: modalFadeIn 0.3s ease-out;
+    }
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-header h3 {
+      color: var(--accent);
+      font-size: 1.5rem;
+    }
+    .modal-close {
+      background: none;
+      border: none;
+      color: #aaaaaa;
+      font-size: 2rem;
+      cursor: pointer;
+      transition: var(--transition);
+      line-height: 1;
+    }
+    .modal-close:hover {
+      color: var(--accent);
+      transform: rotate(90deg);
+    }
+    .modal-body {
+      padding: 1.5rem;
+    }
+    .package-option {
+      background-color: var(--darker);
+      border: 2px solid var(--accent);
+      border-radius: 8px;
+      padding: 1.2rem;
+      margin-bottom: 1rem;
+    }
+    .option-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+    .option-header h4 {
+      color: var(--light);
+      font-size: 1.1rem;
+    }
+    .option-price {
+      color: var(--accent-light);
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+    .option-features p {
+      color: #aaaaaa;
+      font-size: 0.9rem;
+      margin: 0.3rem 0;
+    }
+    .order-summary {
+      background-color: var(--darker);
+      border-radius: 8px;
+      padding: 1.5rem;
+      border: 1px solid var(--light-gray);
+      margin-top: 1.5rem;
+    }
+    .order-header h4 {
+      color: var(--light);
+      margin-bottom: 1.5rem;
+      font-size: 1.2rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--light-gray);
+    }
+    .summary-details {
+      margin-bottom: 1.5rem;
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.8rem;
+      color: #cccccc;
+    }
+    .summary-row.total {
+      margin-top: 1.2rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--light-gray);
+      font-weight: 700;
+      color: var(--light);
+    }
+    .total-price {
+      color: var(--accent-light);
+      font-size: 1.2rem;
+    }
+    .email-input {
+      margin: 1.5rem 0;
+    }
+    .email-input label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: var(--light);
+    }
+    .email-input input {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      background-color: var(--darker);
+      border: 1px solid var(--light-gray);
+      border-radius: 5px;
+      color: var(--light);
+      font-family: inherit;
+      transition: var(--transition);
+    }
+    .email-input input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.3);
+    }
+    .tos-agreement {
+      margin: 1.5rem 0;
+    }
+    .checkbox-container {
+      display: block;
+      position: relative;
+      padding-left: 35px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: #aaaaaa;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+    .checkbox-container input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      height: 0;
+      width: 0;
+    }
+    .checkmark {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 20px;
+      width: 20px;
+      background-color: var(--darker);
+      border: 1px solid var(--light-gray);
+      border-radius: 3px;
+    }
+    .checkbox-container:hover input ~ .checkmark {
+      border-color: var(--accent);
+    }
+    .checkbox-container input:checked ~ .checkmark {
+      background-color: var(--accent);
+      border-color: var(--accent);
+    }
+    .checkmark:after {
+      content: "";
+      position: absolute;
+      display: none;
+    }
+    .checkbox-container input:checked ~ .checkmark:after {
+      display: block;
+    }
+    .checkbox-container .checkmark:after {
+      left: 7px;
+      top: 3px;
+      width: 5px;
+      height: 10px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+    .checkbox-container a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .checkbox-container a:hover {
+      text-decoration: underline;
+    }
+    .security-notice {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      color: #aaaaaa;
+      font-size: 0.8rem;
+    }
+    .security-notice i {
+      color: var(--accent);
+    }
+    .shake {
+      animation: shake 0.5s;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+    }
+    footer {
+      background: rgba(0, 0, 0, 0.95);
+      padding: 1.2rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--light);
+      text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+      position: relative;
+      border-top: 1px solid var(--primary);
+    }
+    .footer-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .footer-content a {
+      margin-left: 0.8rem;
+      text-decoration: none;
+      color: var(--light);
+      display: flex;
+      align-items: center;
+    }
+    .footer-content a:hover {
+      text-shadow: 0 0 10px rgba(0, 0, 255, 0.5);
+    }
+    .footer-content img {
+      width: 25px;
+      height: 25px;
+      margin-right: 4px;
+      transition: transform 0.3s;
+    }
+    .footer-content img:hover {
+      transform: scale(1.2);
+    }
+    @media (max-width: 768px) {
+      header {
+        padding: 0.6rem 0.8rem;
+      }
+      .logo {
+        height: 30px;
+      }
+      nav {
+        display: none;
+      }
+      .hamburger {
+        display: block;
+      }
+      .tools-section {
+        padding: 4rem 0.8rem 2rem;
+      }
+      .section-title {
+        font-size: 2rem;
+      }
+      .typewriter {
+        font-size: 1rem;
+        max-width: 90%;
+      }
+      .service-card-container {
+        padding: 1rem;
+      }
+      .modal-content {
+        width: 95%;
+      }
+      footer {
+        padding: 1rem 0.8rem;
+      }
+      .footer-content {
+        flex-direction: column;
+        align-items: center;
+      }
+      .footer-content a {
+        margin: 0.5rem 0;
+      }
+      .footer-content span {
+        margin-bottom: 0.5rem;
+      }
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="vanta-bg"></div>
+  <audio id="background-music" loop>
+    <source src="pics/dreams.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+  <header>
+    <img id="logo" src="https://images5.alphacoders.com/133/1334125.jpeg" alt="Rey Logo" class="logo" onclick="toggleMusic()">
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="courses.html">Courses</a>
+      <a href="tools.html" class="tools">Tools</a>
+      <a href="hallofshame.html">Hall of Shame</a>
+    </nav>
+    <input type="checkbox" id="hamburger-toggle" class="hamburger-toggle">
+    <label for="hamburger-toggle" class="hamburger">☰</label>
+    <div class="hamburger-menu">
+      <a href="index.html">Home</a>
+      <a href="courses.html">Courses</a>
+      <a href="tools.html" class="tools">Tools</a>
+      <a href="hallofshame.html">Hall of Shame</a>
+    </div>
+  </header>
+  <section class="tools-section">
+    <h1 class="section-title">Tools</h1>
+    <div class="typewriter" id="typewriter"></div>
+    <h2 class="section-title">Free Tools</h2>
+    <div class="service-card-container">
+      <div class="service-card">
+        <div class="service-card-header">
+          <h3>Supply Demand</h3>
+          <p>Identify key market zones</p>
+        </div>
+        <div class="service-card-body">
+          <div class="price-tag">Free</div>
+          <ul class="features-list">
+            <li>Supply and demand zones</li>
+            <li>Easy to use</li>
+            <li>Free access forever</li>
+          </ul>
+          <div class="service-card-footer">
+            <a href="/access/supply-demand" class="btn btn-primary access-btn" data-item="Supply Demand">Access Now</a>
+          </div>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-card-header">
+          <h3>Don Forex</h3>
+          <p>Forex trading indicator</p>
+        </div>
+        <div class="service-card-body">
+          <div class="price-tag">Free</div>
+          <ul class="features-list">
+            <li>Forex market signals</li>
+            <li>User-friendly interface</li>
+            <li>Free access forever</li>
+          </ul>
+          <div class="service-card-footer">
+            <a href="/access/don-forex" class="btn btn-primary access-btn" data-item="Don Forex">Access Now</a>
+          </div>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-card-header">
+          <h3>Raiders on the Storm</h3>
+          <p>Advanced trading tool</p>
+        </div>
+        <div class="service-card-body">
+          <div class="price-tag">Free</div>
+          <ul class="features-list">
+            <li>Market trend analysis</li>
+            <li>Real-time data</li>
+            <li>Free access forever</li>
+          </ul>
+          <div class="service-card-footer">
+            <a href="/access/raiders-on-the-storm" class="btn btn-primary access-btn" data-item="Raiders on the Storm">Access Now</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <h2 class="section-title">Premium Tools</h2>
+    <div class="service-card-container">
+      <div class="service-card">
+        <div class="service-card-header">
+          <h3>Price Action (80%)</h3>
+          <p>High-accuracy indicator</p>
+        </div>
+        <div class="service-card-body">
+          <div class="price-tag">$100</div>
+          <ul class="features-list">
+            <li>80% accuracy signals</li>
+            <li>Advanced price action</li>
+            <li>Lifetime access</li>
+          </ul>
+          <div class="service-card-footer">
+            <a href="#" class="btn btn-primary purchase-btn" data-item="Price Action (80%)" data-price="100">Purchase Now</a>
+          </div>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-card-header">
+          <h3>RedknightFx Levels</h3>
+          <p>Key level indicator</p>
+        </div>
+        <div class="service-card-body">
+          <div class="price-tag">$50</div>
+          <ul class="features-list">
+            <li>Support and resistance levels</li>
+            <li>High precision</li>
+            <li>Lifetime access</li>
+          </ul>
+          <div class="service-card-footer">
+            <a href="#" class="btn btn-primary purchase-btn" data-item="RedknightFx Levels" data-price="50">Purchase Now</a>
+          </div>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-card-header">
+          <h3>Magnus Pro v2</h3>
+          <p>Professional trading tool</p>
+        </div>
+        <div class="service-card-body">
+          <div class="price-tag">$20</div>
+          <ul class="features-list">
+            <li>Enhanced trading signals</li>
+            <li>Customizable settings</li>
+            <li>Lifetime access</li>
+          </ul>
+          <div class="service-card-footer">
+            <a href="#" class="btn btn-primary purchase-btn" data-item="Magnus Pro v2" data-price="20">Purchase Now</a>
+          </div>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-card-popular">Most Popular</div>
+        <div class="service-card-header">
+          <h3>Price Action Pro</h3>
+          <p>Ultimate price action tool</p>
+        </div>
+        <div class="service-card-body">
+          <div class="price-tag">$120</div>
+          <ul class="features-list">
+            <li>Pro-level price action</li>
+            <li>Exclusive features</li>
+            <li>Lifetime access</li>
+          </ul>
+          <div class="service-card-footer">
+            <a href="#" class="btn btn-primary purchase-btn" data-item="Price Action Pro" data-price="120">Purchase Now</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="modal-overlay" id="purchaseModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Purchase Tool</h3>
+        <button class="modal-close">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="package-option active" id="modal-package-option">
+          <div class="option-header">
+            <h4 id="modal-item-name"></h4>
+            <div class="option-price" id="modal-item-price"></div>
+          </div>
+          <div class="option-features">
+            <p>Lifetime access</p>
+            <p>Instant delivery</p>
+          </div>
+        </div>
+        <div class="order-summary">
+          <div class="order-header">
+            <h4>Order Summary</h4>
+          </div>
+          <div class="summary-details">
+            <div class="summary-row">
+              <span>Tool:</span>
+              <span class="selected-package"></span>
+            </div>
+            <div class="summary-row">
+              <span>Price:</span>
+              <span class="selected-price"></span>
+            </div>
+            <div class="summary-row total">
+              <span>Total:</span>
+              <span class="total-price"></span>
+            </div>
+          </div>
+          <div class="email-input">
+            <label for="purchase-email">Your Email:</label>
+            <input type="email" id="purchase-email" placeholder="Enter your email" required>
+          </div>
+          <div class="tos-agreement">
+            <label class="checkbox-container">
+              <input type="checkbox" id="purchase-tos-agreement" required>
+              <span class="checkmark"></span>
+              I agree to the <a href="/tos" target="_blank">Terms of Service</a> and <a href="/refund-policy" target="_blank">Refund Policy</a>
+            </label>
+          </div>
+          <div class="service-card-footer">
+            <a href="#" class="btn btn-primary complete-purchase-btn">
+              <i class="fas fa-lock"></i> Complete Purchase
+            </a>
+          </div>
+          <div class="security-notice">
+            <i class="fas fa-shield-alt"></i>
+            <span>All payments are secure and encrypted</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <div class="footer-content">
+      <span>© 2025 REY. All rights reserved |</span>
+      <a href="https://t.me/groxmcislitt" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
+        Contact Us
+      </a>
+    </div>
+  </footer>
+  <script>
+    // Disable developer keys
+    document.addEventListener('keydown', function(event) {
+      if (
+        event.key === 'F12' ||
+        (event.ctrlKey && event.shiftKey && event.key === 'I') ||
+        (event.ctrlKey && event.key === 'U') ||
+        (event.ctrlKey && event.key === 'S')
+      ) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    });
 
+    // Vanta.js Background
+    VANTA.WAVES({
+      el: ".vanta-bg",
+      mouseControls: true,
+      touchControls: true,
+      gyroControls: false,
+      minHeight: 200.00,
+      minWidth: 200.00,
+      scale: 1.00,
+      scaleMobile: 1.00,
+      color: 0x1a1a1a,
+      shininess: 40.00,
+      waveHeight: 15.00,
+      waveSpeed: 0.75,
+      zoom: 0.65
+    });
+
+    // Music Control
+    const audio = document.getElementById('background-music');
+    function toggleMusic() {
+      if (audio.paused) {
+        audio.play();
+      } else {
+        audio.pause();
+      }
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      audio.play().catch(error => {
+        console.log('Music playback failed:', error);
+      });
+    });
+
+    // Typewriter
+    const typewriter = document.getElementById('typewriter');
+    const phrases = ['Enhance Trading', 'Powerful Indicators', 'Boost Profits', 'Trade Smart'];
+    let phraseIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    function type() {
+      const currentPhrase = phrases[phraseIndex];
+      if (isDeleting) {
+        typewriter.textContent = currentPhrase.substring(0, charIndex--);
+        if (charIndex < 0) {
+          isDeleting = false;
+          phraseIndex = (phraseIndex + 1) % phrases.length;
+          setTimeout(type, 500);
+        } else {
+          setTimeout(type, 50);
+        }
+      } else {
+        typewriter.textContent = currentPhrase.substring(0, charIndex++);
+        if (charIndex > currentPhrase.length) {
+          isDeleting = true;
+          setTimeout(type, 1500);
+        } else {
+          setTimeout(type, 100);
+        }
+      }
+    }
+    setTimeout(type, 1000);
+
+    // Telegram Notification
+    async function sendTelegramMessage(item, action) {
+      const botToken = 'YOUR_BOT_TOKEN'; // Replace with your Telegram bot token
+      const chatId = 'YOUR_CHAT_ID'; // Replace with your Telegram user ID
+      const message = `User clicked ${action} for ${item}`;
+      try {
+        const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: chatId,
+            text: message
+          })
+        });
+        if (!response.ok) console.error('Failed to send Telegram message');
+      } catch (error) {
+        console.error('Error sending Telegram message:', error);
+      }
+    }
+
+    // Modal Functionality
+    const purchaseModal = document.getElementById('purchaseModal');
+    document.querySelectorAll('.purchase-btn').forEach(button => {
+      button.addEventListener('click', function(e) {
+        e.preventDefault();
+        const item = this.dataset.item;
+        const price = this.dataset.price;
+        const itemName = this.closest('.service-card').querySelector('h3').textContent;
+        sendTelegramMessage(itemName, 'Purchase Now');
+        purchaseModal.querySelector('#modal-item-name').textContent = itemName;
+        purchaseModal.querySelector('#modal-item-price').textContent = `$${price}`;
+        purchaseModal.querySelector('.selected-package').textContent = itemName;
+        purchaseModal.querySelector('.selected-price').textContent = `$${price}`;
+        purchaseModal.querySelector('.total-price').textContent = `$${price}`;
+        purchaseModal.querySelector('.complete-purchase-btn').dataset.item = item;
+        purchaseModal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      });
+    });
+    document.querySelectorAll('.access-btn').forEach(button => {
+      button.addEventListener('click', function(e) {
+        const item = this.dataset.item;
+        sendTelegramMessage(item, 'Access Now');
+      });
+    });
+    document.querySelectorAll('.modal-close').forEach(closeBtn => {
+      closeBtn.addEventListener('click', function() {
+        this.closest('.modal-overlay').style.display = 'none';
+        document.body.style.overflow = 'auto';
+      });
+    });
+    purchaseModal.addEventListener('click', function(e) {
+      if (e.target === this) {
+        this.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }
+    });
+    document.querySelector('.complete-purchase-btn').addEventListener('click', function(e) {
+      e.preventDefault();
+      const emailInput = document.getElementById('purchase-email');
+      const tosCheckbox = document.getElementById('purchase-tos-agreement');
+      let hasError = false;
+      if (!emailInput.value) {
+        emailInput.classList.remove('shake');
+        void emailInput.offsetWidth;
+        emailInput.classList.add('shake');
+        emailInput.style.border = '2px solid #ff4444';
+        setTimeout(() => emailInput.classList.remove('shake'), 500);
+        hasError = true;
+      } else {
+        emailInput.style.border = '';
+      }
+      if (!tosCheckbox.checked) {
+        tosCheckbox.classList.remove('shake');
+        void tosCheckbox.offsetWidth;
+        tosCheckbox.classList.add('shake');
+        setTimeout(() => tosCheckbox.classList.remove('shake'), 500);
+        hasError = true;
+      }
+      if (hasError) return;
+      const item = this.dataset.item;
+      const url = `/checkout/${item}`;
+      window.location.href = url;
+    });
+    document.querySelectorAll('input[required]').forEach(input => {
+      input.addEventListener('blur', function() {
+        if (!this.value) {
+          this.classList.add('error');
+        } else {
+          this.classList.remove('error');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
