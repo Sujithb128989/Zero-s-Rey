@@ -498,16 +498,16 @@
     <a href="#home"><img id="logo" src="https://images5.alphacoders.com/133/1334125.jpeg" alt="Rey Logo" class="logo" onclick="toggleMusic()"></a>
     <nav>
       <a href="#home">Home</a>
-      <a href="courses.html" class="courses">Courses</a>
-      <a href="tools.html">Tools</a>
+      <a href="#courses" class="courses">Courses</a>
+      <a href="#tools">Tools</a>
       <a href="hall-of-shame.html">Hall of Shame</a>
     </nav>
     <input type="checkbox" id="hamburger-toggle" class="hamburger-toggle">
     <label for="hamburger-toggle" class="hamburger">☰</label>
     <div class="hamburger-menu">
       <a href="#home">Home</a>
-      <a href="courses.html" class="courses">Courses</a>
-      <a href="tools.html">Tools</a>
+      <a href="#courses" class="courses">Courses</a>
+      <a href="#tools">Tools</a>
       <a href="hall-of-shame.html">Hall of Shame</a>
     </div>
   </header>
@@ -594,25 +594,24 @@
       const musicState = sessionStorage.getItem('musicState');
       const musicTime = sessionStorage.getItem('musicTime');
       const storedTrack = sessionStorage.getItem('musicTrack');
+      const expectedTrack = isHallOfShame ? 'enemy' : 'dreams';
 
-      if (!isHallOfShame) {
-        if (storedTrack !== 'dreams' && storedTrack !== null) {
-          sessionStorage.setItem('musicTrack', 'dreams');
-          audio.currentTime = 0;
-        } else if (musicState === 'playing' && storedTrack === 'dreams') {
-          audio.currentTime = parseFloat(musicTime) || 0;
-          hasInteracted = true; // Assume interaction occurred in previous session
-        } else if (musicState === 'paused') {
-          audio.currentTime = parseFloat(musicTime) || 0;
-          audio.pause();
-        }
+      if (storedTrack !== expectedTrack && storedTrack !== null) {
+        sessionStorage.setItem('musicTrack', expectedTrack);
+        audio.currentTime = 0;
+      } else if (musicState === 'playing' && storedTrack === expectedTrack) {
+        audio.currentTime = parseFloat(musicTime) || 0;
+        hasInteracted = true; // Assume interaction occurred
+      } else if (musicState === 'paused') {
+        audio.currentTime = parseFloat(musicTime) || 0;
+        audio.pause();
       }
     }
 
     function startMusic() {
-      if (!hasInteracted && !isHallOfShame) {
+      if (!hasInteracted) {
         audio.play().then(() => {
-          sessionStorage.setItem('musicTrack', 'dreams');
+          sessionStorage.setItem('musicTrack', isHallOfShame ? 'enemy' : 'dreams');
           sessionStorage.setItem('musicState', 'playing');
           hasInteracted = true;
         }).catch(error => {
@@ -645,7 +644,9 @@
       sessionStorage.setItem('musicState', 'paused');
     });
 
-    document.addEventListener('click', startMusic, { once: true });
+    ['click', 'mousedown', 'mouseup'].forEach(event => {
+      document.addEventListener(event, startMusic, { once: true });
+    });
 
     // Hero Typewriter
     const typewriter = document.getElementById('typewriter');
