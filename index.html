@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rey</title>
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@700&family=Source+Code+Pro&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.waves.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Source Code Pro', monospace;
+      scroll-behavior: smooth;
+    }
+    body {
+      background: #000000;
+      color: #cccccc;
+      overflow-x: hidden;
+    }
+    .vanta-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+    header {
+      background: rgba(0, 0, 0, 0.9);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      position: fixed;
+      width: 100%;
+      z-index: 10;
+      backdrop-filter: blur(8px);
+    }
+    header h1 {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 2rem;
+      color: #cccccc;
+      text-shadow: 0 0 5px rgba(50, 50, 50, 0.5);
+      margin: 0;
+    }
+    .hamburger {
+      font-size: 1.5rem;
+      color: #cccccc;
+      cursor: pointer;
+      margin-left: 1rem;
+      z-index: 11;
+    }
+    .hamburger-menu {
+      display: none;
+      position: absolute;
+      top: 60px;
+      left: 2rem;
+      background: rgba(0, 0, 0, 0.9);
+      width: 200px;
+      padding: 1rem 0;
+      z-index: 10;
+      border-radius: 0 0 8px 8px;
+    }
+    .hamburger-menu a {
+      display: block;
+      color: #666666;
+      text-decoration: none;
+      padding: 0.8rem 2rem;
+      font-size: 1.1rem;
+      transition: color 0.3s;
+    }
+    .hamburger-menu a:hover {
+      color: #999999;
+      text-shadow: 0 0 3px rgba(50, 50, 50, 0.5);
+    }
+    .hamburger-menu a.courses {
+      color: #ff0000;
+    }
+    .hamburger-menu a.courses:hover {
+      color: #cc0000;
+      text-shadow: 0 0 3px rgba(50, 50, 50, 0.5);
+    }
+    #hamburger-toggle {
+      display: none;
+    }
+    #hamburger-toggle:checked ~ .hamburger-menu {
+      display: block;
+    }
+    nav {
+      margin-left: auto;
+    }
+    nav a {
+      color: #666666;
+      text-decoration: none;
+      margin: 0 1.5rem;
+      font-size: 1.1rem;
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: #999999;
+      text-shadow: 0 0 3px rgba(50, 50, 50, 0.5);
+    }
+    nav a.courses {
+      color: #ff0000;
+    }
+    nav a.courses:hover {
+      color: #cc0000;
+      text-shadow: 0 0 3px rgba(50, 50, 50, 0.5);
+    }
+    @media (max-width: 768px) {
+      nav {
+        display: none;
+      }
+    }
+    .hero {
+      text-align: center;
+      padding: 6rem 2rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-title {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 4.5rem;
+      color: #cccccc;
+      text-shadow: 0 0 8px rgba(50, 50, 50, 0.3);
+      margin-bottom: 1.5rem;
+      animation: fadeIn 2s ease-in;
+    }
+    .hero-description {
+      font-size: 1.2rem;
+      color: #555555;
+      max-width: 600px;
+      margin: 0 auto 1rem;
+      animation: fadeIn 2.5s ease-in;
+    }
+    .hero-typewriter {
+      font-size: 1.3rem;
+      color: #999999;
+      font-weight: bold;
+      display: inline-block;
+      min-height: 1.8rem;
+      animation: fadeIn 3s ease-in;
+    }
+    .versus-section {
+      padding: 4rem 2rem;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.8);
+      position: relative;
+      z-index: 1;
+    }
+    .versus-container {
+      display: flex;
+      width: 100%;
+      max-width: 1200px;
+      height: 500px;
+      margin: 0 auto;
+      overflow: hidden;
+      animation: fadeIn 1s ease-in;
+      position: relative;
+    }
+    .binary-side, .forex-side {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: #ffffff;
+      text-shadow: 0 0 8px rgba(0, 0, 0, 0.9);
+      position: relative;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .binary-side {
+      background: url('https://images.unsplash.com/photo-1593672715438-d88a70629abe?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80') no-repeat center center;
+      background-size: cover;
+      clip-path: polygon(0 0, 100% 0, 80% 100%, 0 100%);
+      animation: slideInLeft 1s ease-out;
+      z-index: 2;
+    }
+    .forex-side {
+      background: url('https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80') no-repeat center center;
+      background-size: cover;
+      clip-path: polygon(20% 0, 100% 0, 100% 100%, 0 100%);
+      animation: slideInRight 1s ease-out;
+      z-index: 1;
+    }
+    .binary-side::before, .forex-side::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 0;
+    }
+    .binary-side:hover, .forex-side:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+    }
+    .side-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem;
+      max-width: 80%;
+    }
+    .side-content h3 {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    .side-content p {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      max-width: 350px;
+    }
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    .dropdown a {
+      background: #ff0000;
+      color: #ffffff;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      text-decoration: none;
+      font-size: 1rem;
+      display: inline-block;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+    .dropdown a:hover {
+      background: #cc0000;
+      box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+    }
+    .vs-animation {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 3;
+      width: 150px;
+      height: 200px;
+      filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.8));
+    }
+    .about-section {
+      padding: 4rem 2rem;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.8);
+      position: relative;
+      z-index: 1;
+      animation: fadeIn 1s ease-in;
+    }
+    .about-section h2 {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 3rem;
+      color: #ffffff;
+      text-shadow: 0 0 8px rgba(0, 0, 0, 0.9);
+      margin-bottom: 1rem;
+    }
+    .about-section p {
+      font-size: 1.2rem;
+      color: #cccccc;
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    footer {
+      background: rgba(0, 0, 0, 0.9);
+      padding: 1rem;
+      text-align: center;
+      font-size: 1rem;
+      color: #ffffff;
+      text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+      position: relative;
+    }
+    .footer-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .footer-content a {
+      margin-left: 1rem;
+      text-decoration: none;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+    }
+    .footer-content a:hover {
+      text-shadow: 0 0 10px rgba(0, 0, 255, 0.5);
+    }
+    .footer-content img {
+      width: 30px;
+      height: 30px;
+      margin-right: 5px;
+      transition: transform 0.3s;
+    }
+    .footer-content img:hover {
+      transform: scale(1.2);
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideInLeft {
+      0% { transform: translateX(-50%); opacity: 0; }
+      100% { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideInRight {
+      0% { transform: translateX(50%); opacity: 0; }
+      100% { transform: translateX(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="vanta-bg"></div>
+  <header>
+    <div style="display: flex; align-items: center;">
+      <h1>Rey</h1>
+      <input type="checkbox" id="hamburger-toggle" class="hamburger-toggle">
+      <label for="hamburger-toggle" class="hamburger">☰</label>
+      <div class="hamburger-menu">
+        <a href="#home">Home</a>
+        <a href="#courses" class="courses">Courses</a>
+        <a href="#tools">Tools</a>
+        <a href="hall-of-shame.html">Hall of Shame</a>
+      </div>
+    </div>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#courses" class="courses">Courses</a>
+      <a href="#tools">Tools</a>
+      <a href="hall-of-shame.html">Hall of Shame</a>
+    </nav>
+  </header>
+  <section class="hero" id="home">
+    <h1 class="hero-title">Rey</h1>
+    <p class="hero-description">Master binary options with cosmic precision.</p>
+    <div class="hero-typewriter" id="typewriter"></div>
+  </section>
+  <section class="versus-section">
+    <div class="versus-container">
+      <div class="binary-side">
+        <div class="side-content">
+          <h3>Binary Options</h3>
+          <p>Embark on a perilous quest for swift rewards, where each choice yields fixed bounty or naught.</p>
+          <div class="dropdown">
+            <a href="binary-options.html#risk-management">Risk Management Free Tool</a>
+          </div>
+        </div>
+      </div>
+      <div class="forex-side">
+        <div class="side-content">
+          <h3>Forex</h3>
+          <p>Venture through the vast realms of coinage, wielding strategy to conquer the tides of wealth.</p>
+          <div class="dropdown">
+            <a href="forex.html#risk-management">Risk Management Free Tool</a>
+          </div>
+        </div>
+      </div>
+      <img src="https://8wayrun.tv/scripts/versus/vs.png" class="vs-animation" alt="VS Logo">
+    </div>
+  </section>
+  <section class="about-section">
+    <h2>About</h2>
+    <p>We are not a financial entity and do not endorse any financial products or services. We solely provide third-party services and are not responsible for any outcomes resulting from the use of our services. Members mentioned in the Hall of Shame are strictly prohibited from using our services; if found, they can be charged legally. We only provide services and take no responsibility for any consequences.</p>
+  </section>
+  <footer>
+    <div class="footer-content">
+      <span>© 2025 REY. All rights reserved |</span>
+      <a href="https://t.me/groxmcislitt" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
+        Contact Us
+      </a>
+    </div>
+  </footer>
+  <script>
+    VANTA.WAVES({
+      el: ".vanta-bg",
+      mouseControls: true,
+      touchControls: true,
+      gyroControls: false,
+      minHeight: 200.00,
+      minWidth: 200.00,
+      scale: 1.00,
+      scaleMobile: 1.00,
+      color: 0x1a1a1a,
+      shininess: 40.00,
+      waveHeight: 15.00,
+      waveSpeed: 0.75,
+      zoom: 0.65
+    });
+
+    const typewriter = document.getElementById('typewriter');
+    const phrases = ['Risk Management', 'Binary Options', 'Trade Strategies', 'Market Analysis'];
+    let phraseIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+
+    function type() {
+      const currentPhrase = phrases[phraseIndex];
+      if (isDeleting) {
+        typewriter.textContent = currentPhrase.substring(0, charIndex--);
+        if (charIndex < 0) {
+          isDeleting = false;
+          phraseIndex = (phraseIndex + 1) % phrases.length;
+          setTimeout(type, 500);
+        } else {
+          setTimeout(type, 50);
+        }
+      } else {
+        typewriter.textContent = currentPhrase.substring(0, charIndex++);
+        if (charIndex > currentPhrase.length) {
+          isDeleting = true;
+          setTimeout(type, 1500);
+        } else {
+          setTimeout(type, 100);
+        }
+      }
+    }
+    setTimeout(type, 1000);
+  </script>
+</body>
+</html>
