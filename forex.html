@@ -233,6 +233,29 @@
     body.light-mode .gif-container img {
       border-color: #cc0000;
     }
+    .ads-section {
+      text-align: center;
+      margin-top: 1.5rem;
+      padding-bottom: 2rem;
+    }
+    .ad-box {
+      max-width: 728px;
+      min-height: 90px;
+      margin: 1rem auto;
+      border: 2px solid #ff0000;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #1f2937;
+      color: #ffffff;
+      animation: fadeIn 1s ease-in;
+    }
+    body.light-mode .ad-box {
+      border-color: #cc0000;
+      background: #e5e7eb;
+      color: #000000;
+    }
     .hidden {
       display: none;
     }
@@ -276,36 +299,6 @@
       .hamburger {
         display: block;
       }
-	     .ads-section {
-      text-align: center;
-      margin-top: 1.5rem;
-    }
-    .ad-box {
-      max-width: 300px;
-      min-height: 250px;
-      margin: 0 auto;
-      border: 2px solid #ff0000;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #1f2937;
-      color: #ffffff;
-    }
-    body.light-mode .ad-box {
-      border-color: #cc0000;
-      background: #e5e7eb;
-      color: #000000;
-    }
-      
-      .ads-section {
-        margin-top: 1rem;
-      }
-      .ad-box {
-        max-width: 250px;
-        min-height: 200px;
-        margin-top: 1rem;
-      }
       .main-section {
         padding: 3rem 0.8rem;
         margin-bottom: 1.5rem;
@@ -333,6 +326,15 @@
       }
       .gif-container {
         max-width: 200px;
+        margin: 0.5rem auto;
+      }
+      .ads-section {
+        margin-top: 1rem;
+        padding-bottom: 1.5rem;
+      }
+      .ad-box {
+        max-width: 100%;
+        min-height: 90px;
         margin: 0.5rem auto;
       }
       #win-loss-counter {
@@ -363,7 +365,7 @@
 </head>
 <body>
   <audio id="background-music" loop>
-    <source src="pics/dreams.mp3" type="audio/mpeg">
+    <source src="music/dreams.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
   <div id="spotlight-overlay" class="spotlight-overlay hidden">
@@ -403,7 +405,7 @@
         <input id="rr-ratio-fixed" type="number" placeholder="RR Ratio (e.g., 2)" class="p-2 bg-gray-800 text-white rounded" min="0.1" step="0.1">
       </div>
       <button id="start-session-fixed" class="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Start Session</button>
-      <button id="end-session-fixed" class="mt-4 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 hidden">End Session</button>
+      <button id="end-session-fixed" classarine="mt-4 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 hidden">End Session</button>
     </div>
     <div id="martingale-form" class="mb-6 hidden">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-lg mx-auto">
@@ -447,39 +449,53 @@
         <canvas id="win-percent-chart" width="200" height="200" style="border: 2px solid #ff0000; border-radius: 8px;"></canvas>
       </div>
     </div>
-  </section>
- <div class="ads-section">
+    <div class="ads-section">
       <h2 class="text-xl font-bold text-red-600">Ads</h2>
-      <div id="adsterra-ad" class="ad-box">
-       <script type="text/javascript">
-	atOptions = {
-		'key' : 'b16346fc9428fedd09fc1e96f308a11a',
-		'format' : 'iframe',
-		'height' : 90,
-		'width' : 728,
-		'params' : {}
-	};
-</script>
-<script type="text/javascript" src="//depleterefutation.com/b16346fc9428fedd09fc1e96f308a11a/invoke.js"></script><script type="text/javascript">
-	atOptions = {
-		'key' : 'b16346fc9428fedd09fc1e96f308a11a',
-		'format' : 'iframe',
-		'height' : 90,
-		'width' : 728,
-		'params' : {}
-	};
-</script>
-<script type="text/javascript" src="//depleterefutation.com/b16346fc9428fedd09fc1e96f308a11a/invoke.js"></script>
+      <div id="adsterra-ad-1" class="ad-box">
+        <script type="text/javascript">
+          atOptions = {
+            'key': 'b16346fc9428fedd09fc1e96f308a11a',
+            'format': 'iframe',
+            'height': 90,
+            'width': 728,
+            'params': {}
+          };
+        </script>
+        <script type="text/javascript" src="//depleterefutation.com/b16346fc9428fedd09fc1e96f308a11a/invoke.js"></script>
+      </div>
+      <div id="adsterra-ad-2" class="ad-box">
+        <script type="text/javascript">
+          atOptions = {
+            'key': 'b16346fc9428fedd09fc1e96f308a11a',
+            'format': 'iframe',
+            'height': 90,
+            'width': 728,
+            'params': {}
+          };
+        </script>
+        <script type="text/javascript" src="//depleterefutation.com/b16346fc9428fedd09fc1e96f308a11a/invoke.js"></script>
+      </div>
+      <div id="adsterra-ad-3" class="ad-box">
+        <script type="text/javascript">
+          atOptions = {
+            'key': 'b16346fc9428fedd09fc1e96f308a11a',
+            'format': 'iframe',
+            'height': 90,
+            'width': 728,
+            'params': {}
+          };
+        </script>
+        <script type="text/javascript" src="//depleterefutation.com/b16346fc9428fedd09fc1e96f308a11a/invoke.js"></script>
       </div>
     </div>
+  </section>
   <footer>
     <div class="footer-content">
-      <span>© 2025 REY. All rights reserved |</a></span>
+      <span>© 2025 REY. All rights reserved | GIFs by <a href="https://giphy.com/" target="_blank">Giphy</a></span>
       <a href="https://t.me/groxmcislitt" target="_blank">
         <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
         Contact Us
-      </a><br>
-      <a href="https://giphy.com/" target="_blank">Giphy
+      </a>
     </div>
   </footer>
   <script>
@@ -505,14 +521,13 @@
 
     // Music Control
     const audio = document.getElementById('background-music');
-    const isHallOfShame = window.location.pathname.includes('hall-of-shame.html');
     let hasInteracted = false;
 
     function initializeMusic() {
       const musicState = sessionStorage.getItem('musicState');
       const musicTime = sessionStorage.getItem('musicTime');
       const storedTrack = sessionStorage.getItem('musicTrack');
-      const expectedTrack = 'enemy';
+      const expectedTrack = 'dreams';
 
       if (storedTrack !== expectedTrack && storedTrack !== null) {
         sessionStorage.setItem('musicTrack', expectedTrack);
@@ -529,7 +544,7 @@
     function startMusic() {
       if (!hasInteracted) {
         audio.play().then(() => {
-          sessionStorage.setItem('musicTrack', 'enemy');
+          sessionStorage.setItem('musicTrack', 'dreams');
           sessionStorage.setItem('musicState', 'playing');
           hasInteracted = true;
         }).catch(error => {
