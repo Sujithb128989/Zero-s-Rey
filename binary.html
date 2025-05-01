@@ -1,1 +1,875 @@
-asa
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Binary Options Risk Manager</title>
+  <link rel="icon" type="image/x-icon" href="pics/favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@700&family=Source+Code+Pro&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Source Code Pro', monospace;
+      scroll-behavior: smooth;
+    }
+    body {
+      background: #000000;
+      color: #cccccc;
+      overflow-x: hidden;
+    }
+    body.light-mode {
+      background: #ffffff;
+      color: #333333;
+    }
+    header {
+      background: rgba(0, 0, 0, 0.9);
+      padding: 0.6rem 0.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      width: 100%;
+      z-index: 10;
+      backdrop-filter: blur(8px);
+    }
+    body.light-mode header {
+      background: rgba(255, 255, 255, 0.9);
+    }
+    .logo {
+      height: 35px;
+      width: auto;
+      transition: transform 0.3s;
+      cursor: pointer;
+    }
+    .logo:hover {
+      transform: scale(1.1);
+    }
+    nav a {
+      color: #666666;
+      text-decoration: none;
+      margin: 0 0.5rem;
+      font-size: 1rem;
+      transition: color 0.3s;
+    }
+    body.light-mode nav a {
+      color: #333333;
+    }
+    nav a:hover {
+      color: #999999;
+      text-shadow: 0 0 3px rgba(50, 50, 50, 0.5);
+    }
+    body.light-mode nav a:hover {
+      color: #666666;
+    }
+    nav a.courses {
+      color: #ff0000;
+    }
+    nav a.courses:hover {
+      color: #cc0000;
+    }
+    .hamburger {
+      display: none;
+      font-size: 1.5rem;
+      color: #cccccc;
+      cursor: pointer;
+      z-index: 11;
+      margin-left: 0.5rem;
+    }
+    body.light-mode .hamburger {
+      color: #333333;
+    }
+    .hamburger-menu {
+      display: none;
+      position: absolute;
+      top: 50px;
+      right: 0;
+      background: rgba(0, 0, 0, 0.95);
+      width: 180px;
+      padding: 0.8rem 0;
+      z-index: 10;
+      border-radius: 0 0 0 8px;
+    }
+    body.light-mode .hamburger-menu {
+      background: rgba(255, 255, 255, 0.95);
+    }
+    .hamburger-menu a {
+      display: block;
+      color: #666666;
+      text-decoration: none;
+      padding: 0.6rem 1.5rem;
+      font-size: 1rem;
+      transition: color 0.3s;
+    }
+    body.light-mode .hamburger-menu a {
+      color: #333333;
+    }
+    .hamburger-menu a:hover {
+      color: #999999;
+    }
+    body.light-mode .hamburger-menu a:hover {
+      color: #666666;
+    }
+    .hamburger-menu a.courses {
+      color: #ff0000;
+    }
+    .hamburger-menu a.courses:hover {
+      color: #cc0000;
+    }
+    #hamburger-toggle:checked ~ .hamburger-menu {
+      display: block;
+    }
+    .main-section {
+      text-align: center;
+      padding: 4rem 1rem;
+      min-height: 100vh;
+      position: relative;
+      z-index: 1;
+      margin-bottom: 2rem;
+    }
+    .main-title {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 3.5rem;
+      color: #ff0000;
+      text-shadow: 0 0 8px rgba(50, 50, 50, 0.3);
+      margin-bottom: 1.5rem;
+      animation: fadeIn 2s ease-in;
+    }
+    body.light-mode .main-title {
+      color: #cc0000;
+      text-shadow: none;
+    }
+    footer {
+      background: rgba(0, 0, 0, 0.95);
+      padding: 0.8rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: #ffffff;
+      position: relative;
+      border-top: 1px solid #ff0000;
+    }
+    body.light-mode footer {
+      background: rgba(255, 255, 255, 0.95);
+      color: #333333;
+      border-top: 1px solid #cc0000;
+    }
+    .footer-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      max-w-4xl;
+      margin: 0 auto;
+    }
+    .footer-content a {
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    body.light-mode .footer-content a {
+      color: #333333;
+    }
+    .footer-content img {
+      height: 16px;
+      transition: transform 0.3s;
+    }
+    .footer-content img:hover {
+      transform: scale(1.2);
+    }
+    .spotlight-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 100;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    body.light-mode .spotlight-overlay {
+      background: rgba(255, 255, 255, 0.9);
+    }
+    .spotlight-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .spotlight {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, transparent 70%);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .spotlight-text {
+      position: absolute;
+      color: #ffffff;
+      font-size: 0.9rem;
+      text-align: center;
+      max-width: 200px;
+      z-index: 101;
+    }
+    body.light-mode .spotlight-text {
+      color: #333333;
+    }
+    .gif-container {
+      max-width: 300px;
+      margin: 1rem auto;
+      display: none;
+    }
+    .gif-container img {
+      width: 100%;
+      border-radius: 8px;
+      border: 2px solid #ff0000;
+      animation: fadeInOut 3s ease-in-out;
+    }
+    body.light-mode .gif-container img {
+      border-color: #cc0000;
+    }
+    .ads-section {
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+    .ad-box {
+      max-width: 300px;
+      min-height: 250px;
+      margin: 0 auto;
+      border: 2px solid #ff0000;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #1f2937;
+      color: #ffffff;
+    }
+    body.light-mode .ad-box {
+      border-color: #cc0000;
+      background: #e5e7eb;
+      color: #000000;
+    }
+    .hidden {
+      display: none;
+    }
+    .balance-window {
+      position: sticky;
+      top: 60px;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      z-index: 5;
+    }
+    body.light-mode .balance-window {
+      background: rgba(255, 255, 255, 0.8);
+    }
+    .shake {
+      animation: shake 0.5s;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+    }
+    @keyframes fadeInOut {
+      0% { opacity: 0; transform: scale(0.9); }
+      10% { opacity: 1; transform: scale(1); }
+      90% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(0.9); }
+    }
+    @media (max-width: 768px) {
+      header {
+        padding: 0.6rem 0.8rem;
+      }
+      .logo {
+        height: 30px;
+      }
+      nav {
+        display: none;
+      }
+      .hamburger {
+        display: block;
+      }
+      .main-section {
+        padding: 3rem 0.8rem;
+        margin-bottom: 1.5rem;
+      }
+      .main-title {
+        font-size: 2.5rem;
+      }
+      footer {
+        padding: 0.6rem 0.8rem;
+      }
+      .footer-content {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      .footer-content a {
+        margin: 0.5rem 0;
+      }
+      .spotlight {
+        width: 80px;
+        height: 80px;
+      }
+      .spotlight-text {
+        font-size: 0.8rem;
+        max-width: 150px;
+      }
+      .gif-container {
+        max-width: 200px;
+        margin: 0.5rem auto;
+      }
+      .ads-section {
+        margin-top: 1rem;
+      }
+      .ad-box {
+        max-width: 250px;
+        min-height: 200px;
+        margin-top: 1rem;
+      }
+      #win-loss-counter {
+        font-size: 1.125rem; /* text-lg */
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+      }
+      #equity-chart {
+        max-height: 250px;
+        max-width: 100%;
+      }
+      #win-percent-chart {
+        max-width: 150px;
+        width: 150px;
+        height: 150px;
+        margin-top: 0.5rem;
+      }
+      #trade-plan button {
+        min-width: 80px;
+        padding: 0.5rem;
+      }
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <audio id="background-music" loop>
+    <source src="pics/dreams.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+  <div id="spotlight-overlay" class="spotlight-overlay hidden">
+    <div id="spotlight" class="spotlight"></div>
+    <div id="spotlight-text" class="spotlight-text">
+      <p>Clicking the logo will stop music</p>
+    </div>
+  </div>
+  <header class="flex justify-between items-center">
+    <a href="index.html"><img id="logo" src="https://images5.alphacoders.com/133/1334125.jpeg" alt="Rey Logo" class="logo" onclick="toggleMusic()"></a>
+    <nav class="flex items-center">
+      <a href="index.html#home" class="mx-2">Home</a>
+      <a href="courses.html" class="courses mx-2">Courses</a>
+      <a href="tools.html" class="mx-2">Tools</a>
+      <button id="theme-toggle" class="ml-4 p-2 bg-gray-800 text-white rounded hover:bg-gray-700">Light Mode</button>
+    </nav>
+    <input type="checkbox" id="hamburger-toggle" class="hidden">
+    <label for="hamburger-toggle" class="hamburger">☰</label>
+    <div class="hamburger-menu">
+      <a href="index.html#home">Home</a>
+      <a href="courses.html" class="courses">Courses</a>
+      <a href="tools.html">Tools</a>
+    </div>
+  </header>
+  <section class="main-section container mx-auto text-center">
+    <h1 class="main-title">Binary Options Risk Manager</h1>
+    <div class="flex justify-center mb-6">
+      <button id="fixed-risk-tab" class="px-4 py-2 bg-red-600 text-white rounded-l hover:bg-red-700">Fixed % Risk</button>
+      <button id="martingale-tab" class="px-4 py-2 bg-gray-600 text-white rounded-r hover:bg-gray-700">Martingale</button>
+    </div>
+    <div id="fixed-risk-form" class="mb-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-lg mx-auto">
+        <input id="capital-fixed" type="number" placeholder="Capital ($)" class="p-2 bg-gray-800 text-white rounded" min="1">
+        <input id="risk-percent-fixed" type="number" placeholder="Risk (%)" class="p-2 bg-gray-800 text-white rounded" min="0.1" max="100" step="0.1">
+        <input id="payout-percent-fixed" type="number" placeholder="Payout (%)" class="p-2 bg-gray-800 text-white rounded" min="1" max="100" step="0.1">
+      </div>
+      <button id="start-session-fixed" class="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Start Session</button>
+      <button id="end-session-fixed" class="mt-4 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 hidden">End Session</button>
+    </div>
+    <div id="martingale-form" class="mb-6 hidden">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-lg mx-auto">
+        <input id="capital-martingale" type="number" placeholder="Capital ($)" class="p-2 bg-gray-800 text-white rounded" min="1">
+        <input id="risk-percent-martingale" type="number" placeholder="Initial Risk (%)" class="p-2 bg-gray-800 text-white rounded" min="0.1" max="100" step="0.1">
+        <input id="payout-percent-martingale" type="number" placeholder="Payout (%)" class="p-2 bg-gray-800 text-white rounded" min="1" max="100" step="0.1">
+      </div>
+      <button id="start-session-martingale" class="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Start Session</button>
+      <button id="end-session-martingale" class="mt-4 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 hidden">End Session</button>
+    </div>
+    <div id="balance-window" class="balance-window max-w-lg mx-auto text-lg hidden">
+      Current Balance: $<span id="current-balance">0.00</span>
+    </div>
+    <div id="alerts" class="mb-6"></div>
+    <div class="overflow-x-auto">
+      <table id="trade-plan" class="w-full max-w-4xl mx-auto text-left text-sm">
+        <thead>
+          <tr class="bg-gray-800">
+            <th class="p-2">Trade #</th>
+            <th class="p-2">Position Size ($)</th>
+            <th class="p-2">Profit/Loss ($)</th>
+            <th class="p-2">Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div id="gif-container" class="gif-container hidden">
+      <img id="trade-gif" src="" alt="Trade Outcome">
+    </div>
+    <div class="mt-6">
+      <div id="win-loss-counter" class="text-xl font-bold flex justify-center items-center gap-4 mt-4"></div>
+    </div>
+    <button id="new-session" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 hidden">Start New Session</button>
+    <div class="grid grid-cols-1 gap-4 mt-6 max-w-4xl mx-auto">
+      <canvas id="equity-chart" class="max-w-lg mx-auto" style="max-height: 300px;"></canvas>
+      <div class="max-w-[200px] mx-auto mt-4">
+        <canvas id="win-percent-chart" width="200" height="200" style="border: 2px solid #ff0000; border-radius: 8px;"></canvas>
+      </div>
+    </div>
+    <div class="ads-section">
+      <h2 class="text-xl font-bold text-red-600">Ads</h2>
+      <div id="adsterra-ad" class="ad-box">
+      </div>
+    </div>
+  </section>
+  <footer>
+    <div class="footer-content">
+      <span>© 2025 REY. All rights reserved | 
+      <a href="https://t.me/groxmcislitt" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
+        Contact Us
+      </a><bv></bv><a href="https://giphy.com/" target="_blank">Giphy</a></span>
+    </div>
+  </footer>
+  <script>
+    // Theme Toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('light-mode');
+      themeToggle.textContent = document.body.classList.contains('light-mode') ? 'Dark Mode' : 'Light Mode';
+    });
+
+    // Disable developer keys
+    document.addEventListener('keydown', (event) => {
+      if (
+        event.key === 'F12' ||
+        (event.ctrlKey && event.shiftKey && event.key === 'I') ||
+        (event.ctrlKey && event.key === 'U') ||
+        (event.ctrlKey && event.key === 'S')
+      ) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    });
+
+    // Music Control
+    const audio = document.getElementById('background-music');
+    const isHallOfShame = window.location.pathname.includes('hall-of-shame.html');
+    let hasInteracted = false;
+
+    function initializeMusic() {
+      const musicState = sessionStorage.getItem('musicState');
+      const musicTime = sessionStorage.getItem('musicTime');
+      const storedTrack = sessionStorage.getItem('musicTrack');
+      const expectedTrack = 'dreams';
+
+      if (storedTrack !== expectedTrack && storedTrack !== null) {
+        sessionStorage.setItem('musicTrack', expectedTrack);
+        audio.currentTime = 0;
+      } else if (musicState === 'playing' && storedTrack === expectedTrack) {
+        audio.currentTime = parseFloat(musicTime) || 0;
+        hasInteracted = true;
+      } else if (musicState === 'paused') {
+        audio.currentTime = parseFloat(musicTime) || 0;
+        audio.pause();
+      }
+    }
+
+    function startMusic() {
+      if (!hasInteracted) {
+        audio.play().then(() => {
+          sessionStorage.setItem('musicTrack', 'dreams');
+          sessionStorage.setItem('musicState', 'playing');
+          hasInteracted = true;
+        }).catch(error => {
+          console.log('Music playback failed:', error);
+        });
+      }
+    }
+
+    function toggleMusic() {
+      if (audio.paused) {
+        audio.play().then(() => {
+          sessionStorage.setItem('musicState', 'playing');
+          hasInteracted = true;
+        });
+      } else {
+        audio.pause();
+        sessionStorage.setItem('musicState', 'paused');
+      }
+    }
+
+    audio.addEventListener('timeupdate', () => {
+      sessionStorage.setItem('musicTime', audio.currentTime);
+    });
+
+    audio.addEventListener('play', () => {
+      sessionStorage.setItem('musicState', 'playing');
+    });
+
+    audio.addEventListener('pause', () => {
+      sessionStorage.setItem('musicState', 'paused');
+    });
+
+    ['click', 'mousedown', 'mouseup', 'mousemove', 'mouseover', 'touchstart'].forEach(event => {
+      document.addEventListener(event, startMusic, { once: true });
+    });
+
+    // Spotlight Effect
+    const spotlightOverlay = document.getElementById('spotlight-overlay');
+    const spotlight = document.getElementById('spotlight');
+    const spotlightText = document.getElementById('spotlight-text');
+    const logo = document.getElementById('logo');
+
+    function showSpotlight() {
+      if (!sessionStorage.getItem('spotlightShown')) {
+        const rect = logo.getBoundingClientRect();
+        spotlight.style.left = `${rect.left + rect.width / 2}px`;
+        spotlight.style.top = `${rect.top + rect.height / 2}px`;
+        spotlightText.style.left = `${rect.left + rect.width / 2}px`;
+        spotlightText.style.top = `${rect.top + rect.height + 20}px`;
+        spotlightOverlay.classList.remove('hidden');
+        spotlightOverlay.classList.add('active');
+        sessionStorage.setItem('spotlightShown', 'true');
+      }
+    }
+
+    function closeSpotlight() {
+      spotlightOverlay.classList.remove('active');
+      setTimeout(() => {
+        spotlightOverlay.classList.add('hidden');
+      }, 500);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        initializeMusic();
+        showSpotlight();
+      }, 100);
+    });
+
+    spotlightOverlay.addEventListener('click', closeSpotlight);
+
+    // Binary Options Logic
+    const fixedRiskTab = document.getElementById('fixed-risk-tab');
+    const martingaleTab = document.getElementById('martingale-tab');
+    const fixedRiskForm = document.getElementById('fixed-risk-form');
+    const martingaleForm = document.getElementById('martingale-form');
+    const startSessionFixed = document.getElementById('start-session-fixed');
+    const startSessionMartingale = document.getElementById('start-session-martingale');
+    const endSessionFixed = document.getElementById('end-session-fixed');
+    const endSessionMartingale = document.getElementById('end-session-martingale');
+    const newSessionBtn = document.getElementById('new-session');
+    const tradePlanTable = document.querySelector('#trade-plan tbody');
+    const balanceWindow = document.getElementById('balance-window');
+    const currentBalanceSpan = document.getElementById('current-balance');
+    const alertsDiv = document.getElementById('alerts');
+    const winLossCounter = document.getElementById('win-loss-counter');
+    const gifContainer = document.getElementById('gif-container');
+    const tradeGif = document.getElementById('trade-gif');
+    let tradeHistory = JSON.parse(localStorage.getItem('binaryTradeHistory')) || [];
+    let equityChart, winPercentChart;
+    const confetti = new JSConfetti();
+
+    let session = {
+      active: false,
+      mode: null,
+      capital: 0,
+      currentCapital: 0,
+      riskPercent: 0,
+      payoutPercent: 0,
+      positionSize: 0,
+      step: 0,
+      multiplier: 1,
+    };
+
+    function showAlert(message, type = 'info') {
+      alertsDiv.innerHTML = `<div class="p-4 mb-4 text-white rounded ${type === 'success' ? 'bg-green-600' : type === 'warning' ? 'bg-yellow-600' : type === 'error' ? 'bg-red-600' : 'bg-blue-600'}">${message}</div>`;
+    }
+
+    function updateBalance() {
+      currentBalanceSpan.textContent = session.currentCapital.toFixed(2);
+      balanceWindow.classList.remove('hidden');
+    }
+
+    function showGif(outcome) {
+      tradeGif.src = outcome === 'win' ? 'https://media.giphy.com/media/3o7btPCcdNniyf0ArS/giphy.gif' : 'https://media.giphy.com/media/8UGoRT4LS6z6g/giphy.gif';
+      gifContainer.style.display = 'block';
+      setTimeout(() => {
+        gifContainer.style.display = 'none';
+      }, 3000);
+    }
+
+    function updateCharts() {
+      const equity = tradeHistory.reduce((acc, trade, i) => {
+        acc.push(acc[i] + (trade.outcome === 'win' ? trade.profit : -trade.loss));
+        return acc;
+      }, [0]).slice(-100);
+      const streaks = tradeHistory.reduce((acc, trade) => {
+        if (trade.outcome === 'win') acc.wins = (acc.wins || 0) + 1;
+        else if (trade.outcome === 'loss') acc.losses = (acc.losses || 0) + 1;
+        return acc;
+      }, { wins: 0, losses: 0 });
+      const winPercent = tradeHistory.length ? (streaks.wins / tradeHistory.length) * 100 : 0;
+
+      winLossCounter.innerHTML = `
+        <span>Wins: <span class="text-green-500">${streaks.wins}</span></span>
+        <span>Losses: <span class="text-red-500">${streaks.losses}</span></span>
+      `;
+
+      if (equityChart) equityChart.destroy();
+      equityChart = new Chart(document.getElementById('equity-chart'), {
+        type: 'line',
+        data: {
+          labels: Array.from({ length: equity.length }, (_, i) => i + 1),
+          datasets: [{
+            label: 'Equity Curve',
+            data: equity,
+            borderColor: '#22c55e',
+            borderWidth: 3,
+            fill: false,
+            tension: 0.4,
+          }],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: { duration: 500 },
+          scales: {
+            y: { beginAtZero: false, grid: { display: true }, ticks: { font: { size: 12 } } },
+            x: { grid: { display: true }, ticks: { font: { size: 12 } } },
+          },
+          plugins: { legend: { labels: { font: { size: 12 } } } },
+        },
+      });
+
+      if (winPercentChart) winPercentChart.destroy();
+      winPercentChart = new Chart(document.getElementById('win-percent-chart'), {
+        type: 'pie',
+        data: {
+          labels: ['Wins', 'Losses'],
+          datasets: [{
+            data: [winPercent, 100 - winPercent],
+            backgroundColor: ['#22c55e', '#ef4444'],
+          }],
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: 'bottom', labels: { font: { size: 12 } } },
+          },
+        },
+      });
+    }
+
+    function endSession() {
+      session.active = false;
+      sessionStorage.setItem('binarySession', JSON.stringify(session));
+      tradePlanTable.innerHTML = '';
+      showAlert('Session ended. Start a new session to continue.', 'info');
+      newSessionBtn.classList.remove('hidden');
+      startSessionFixed.classList.add('hidden');
+      startSessionMartingale.classList.add('hidden');
+      endSessionFixed.classList.add('hidden');
+      endSessionMartingale.classList.add('hidden');
+      balanceWindow.classList.add('hidden');
+    }
+
+    function showNextTrade() {
+      if (!session.active || session.currentCapital < session.positionSize * session.multiplier) {
+        if (session.currentCapital < session.positionSize * session.multiplier) {
+          showAlert('STOP: Insufficient capital!', 'error');
+        }
+        endSession();
+        return;
+      }
+
+      session.step++;
+      const currentPositionSize = session.positionSize * session.multiplier;
+      const profit = currentPositionSize * session.payoutPercent;
+
+      tradePlanTable.innerHTML = `
+        <tr>
+          <td class="p-2">${session.step}</td>
+          <td class="p-2">$${currentPositionSize.toFixed(2)}</td>
+          <td class="p-2">${profit > 0 ? '+' : '-'}$${Math.abs(profit).toFixed(2)}</td>
+          <td class="p-2">
+            <button id="win-btn" class="px-2 py-1 bg-green-600 rounded hover:bg-green-700" data-position="${currentPositionSize}" data-profit="${profit}">Win</button>
+            <button id="loss-btn" class="px-2 py-1 bg-red-600 rounded hover:bg-red-700" data-position="${currentPositionSize}" data-loss="${currentPositionSize}">Loss</button>
+          </td>
+        </tr>
+      `;
+
+      document.getElementById('win-btn').addEventListener('click', () => {
+        const profit = parseFloat(document.getElementById('win-btn').dataset.profit);
+        session.currentCapital += profit;
+        tradeHistory.push({ outcome: 'win', profit, loss: 0 });
+        localStorage.setItem('binaryTradeHistory', JSON.stringify(tradeHistory));
+        confetti.addConfetti();
+        showGif('win');
+        if (tradeHistory.slice(-3).every(t => t.outcome === 'win')) {
+          showAlert('Congratulations on a 3+ win streak!', 'success');
+        }
+        if (session.mode === 'martingale') {
+          session.multiplier = 1;
+        }
+        updateBalance();
+        updateCharts();
+        showNextTrade();
+      });
+
+      document.getElementById('loss-btn').addEventListener('click', () => {
+        const loss = parseFloat(document.getElementById('loss-btn').dataset.loss);
+        session.currentCapital -= loss;
+        tradeHistory.push({ outcome: 'loss', profit: 0, loss });
+        localStorage.setItem('binaryTradeHistory', JSON.stringify(tradeHistory));
+        tradePlanTable.classList.add('shake');
+        setTimeout(() => tradePlanTable.classList.remove('shake'), 500);
+        showGif('loss');
+        if (tradeHistory.slice(-2).every(t => t.outcome === 'loss')) {
+          showAlert('Warning: 2+ loss streak detected!', 'warning');
+        }
+        if (session.mode === 'martingale') {
+          session.multiplier *= 2;
+        }
+        updateBalance();
+        updateCharts();
+        showNextTrade();
+      });
+    }
+
+    fixedRiskTab.addEventListener('click', () => {
+      fixedRiskTab.classList.add('bg-red-600');
+      fixedRiskTab.classList.remove('bg-gray-600');
+      martingaleTab.classList.add('bg-gray-600');
+      martingaleTab.classList.remove('bg-red-600');
+      fixedRiskForm.classList.remove('hidden');
+      martingaleForm.classList.add('hidden');
+      if (session.active) {
+        endSessionFixed.classList.remove('hidden');
+      }
+    });
+
+    martingaleTab.addEventListener('click', () => {
+      martingaleTab.classList.add('bg-red-600');
+      martingaleTab.classList.remove('bg-gray-600');
+      fixedRiskTab.classList.add('bg-gray-600');
+      fixedRiskTab.classList.remove('bg-red-600');
+      martingaleForm.classList.remove('hidden');
+      fixedRiskForm.classList.add('hidden');
+      if (session.active) {
+        endSessionMartingale.classList.remove('hidden');
+      }
+    });
+
+    startSessionFixed.addEventListener('click', () => {
+      const capital = parseFloat(document.getElementById('capital-fixed').value);
+      const riskPercent = parseFloat(document.getElementById('risk-percent-fixed').value) / 100;
+      const payoutPercent = parseFloat(document.getElementById('payout-percent-fixed').value) / 100;
+
+      if (!capital || !riskPercent || !payoutPercent) {
+        showAlert('Please fill all fields!', 'error');
+        return;
+      }
+
+      const positionSize = capital * riskPercent;
+      session = {
+        active: true,
+        mode: 'fixed',
+        capital,
+        currentCapital: capital,
+        riskPercent,
+        payoutPercent,
+        positionSize,
+        step: 0,
+        multiplier: 1,
+      };
+      sessionStorage.setItem('binarySession', JSON.stringify(session));
+      startSessionFixed.classList.add('hidden');
+      endSessionFixed.classList.remove('hidden');
+      newSessionBtn.classList.add('hidden');
+      tradeHistory = [];
+      localStorage.setItem('binaryTradeHistory', JSON.stringify(tradeHistory));
+      updateBalance();
+      showNextTrade();
+    });
+
+    startSessionMartingale.addEventListener('click', () => {
+      const capital = parseFloat(document.getElementById('capital-martingale').value);
+      const riskPercent = parseFloat(document.getElementById('risk-percent-martingale').value) / 100;
+      const payoutPercent = parseFloat(document.getElementById('payout-percent-martingale').value) / 100;
+
+      if (!capital || !riskPercent || !payoutPercent) {
+        showAlert('Please fill all fields!', 'error');
+        return;
+      }
+
+      const positionSize = capital * riskPercent;
+      session = {
+        active: true,
+        mode: 'martingale',
+        capital,
+        currentCapital: capital,
+        riskPercent,
+        payoutPercent,
+        positionSize,
+        step: 0,
+        multiplier: 1,
+      };
+      sessionStorage.setItem('binarySession', JSON.stringify(session));
+      startSessionMartingale.classList.add('hidden');
+      endSessionMartingale.classList.remove('hidden');
+      newSessionBtn.classList.add('hidden');
+      tradeHistory = [];
+      localStorage.setItem('binaryTradeHistory', JSON.stringify(tradeHistory));
+      updateBalance();
+      showNextTrade();
+    });
+
+    endSessionFixed.addEventListener('click', endSession);
+    endSessionMartingale.addEventListener('click', endSession);
+
+    newSessionBtn.addEventListener('click', () => {
+      session = { active: false };
+      sessionStorage.setItem('binarySession', JSON.stringify(session));
+      newSessionBtn.classList.add('hidden');
+      startSessionFixed.classList.remove('hidden');
+      startSessionMartingale.classList.remove('hidden');
+      tradePlanTable.innerHTML = '';
+      balanceWindow.classList.add('hidden');
+      alertsDiv.innerHTML = '';
+      gifContainer.style.display = 'none';
+      tradeHistory = [];
+      localStorage.setItem('binaryTradeHistory', JSON.stringify(tradeHistory));
+      updateCharts();
+    });
+
+    updateCharts();
+  </script>
+</body>
+</html>
