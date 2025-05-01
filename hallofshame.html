@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hall of Shame</title>
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/x-icon" href="pics/favicon.ico">
   <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@700&family=Source+Code+Pro&display=swap" rel="stylesheet">
   <style>
     * {
@@ -279,7 +279,7 @@
 </head>
 <body>
   <audio id="background-music" loop>
-    <source src="music/enemy.mp3" type="audio/mpeg">
+    <source src="pics/enemy.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
   <div id="spotlight-overlay" class="spotlight-overlay hidden">
@@ -294,7 +294,6 @@
       <a href="index.html#home">Home</a>
       <a href="courses.html" class="courses">Courses</a>
       <a href="tools.html">Tools</a>
-      <a href="hall-of-shame.html">Hall of Shame</a>
     </nav>
     <input type="checkbox" id="hamburger-toggle" class="hamburger-toggle">
     <label for="hamburger-toggle" class="hamburger">☰</label>
@@ -302,7 +301,6 @@
       <a href="index.html#home">Home</a>
       <a href="courses.html" class="courses">Courses</a>
       <a href="tools.html">Tools</a>
-      <a href="hall-of-shame.html">Hall of Shame</a>
     </div>
   </header>
   <section class="main-section">
@@ -310,7 +308,7 @@
     <p class="main-text">
       You have been cast into the Hall of Shame for your dishonorable actions. Your behavior has proven you unworthy of the knowledge and tools offered by Rey. You are expressly forbidden from using this website. Should you dare to defy this ban, you will demonstrate a complete lack of honor and integrity, forever marking yourself as a disgrace in the eyes of this community.
     </p>
-    <img src="shame.png" alt="Dishonorable Comment" class="shame-image">
+    <img src="pics/shame.png" alt="Dishonorable Comment" class="shame-image">
     <p class="image-caption">Evidence of your shameful conduct, preserved for all to see.</p>
   </section>
   <footer>
@@ -395,7 +393,7 @@
       sessionStorage.setItem('musicState', 'paused');
     });
 
-    ['click', 'mousedown', 'mouseup'].forEach(event => {
+    ['click', 'mousedown', 'mouseup', 'mousemove', 'mouseover', 'touchstart'].forEach(event => {
       document.addEventListener(event, startMusic, { once: true });
     });
 
