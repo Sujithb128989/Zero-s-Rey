@@ -328,7 +328,7 @@
         max-width: 200px;
         margin: 0.5rem auto;
       }
-      ..ads-section {
+      .ads-section {
         margin-top: 1rem;
         padding-bottom: 1.5rem;
       }
@@ -401,6 +401,8 @@
         <input id="capital-fixed" type="number" placeholder="Capital ($)" class="p-2 bg-gray-800 text-white rounded" min="1">
         <input id="risk-percent-fixed" type="number" placeholder="Risk (%)" class="p-2 bg-gray-800 text-white rounded" min="0.1" max="100" step="0.1">
         <input id="payout-percent-fixed" type="number" placeholder="Payout (%)" class="p-2 bg-gray-800 text-white rounded" min="1" max="100" step="0.1">
+        <input id="tp-fixed" type="number" placeholder="Take Profit ($)" class="p-2 bg-gray-800 text-white rounded" min="0">
+        <input id="sl-fixed" type="number" placeholder="Stop Loss ($)" class="p-2 bg-gray-800 text-white rounded" min="0">
       </div>
       <button id="start-session-fixed" class="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Start Session</button>
       <button id="end-session-fixed" class="mt-4 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 hidden">End Session</button>
@@ -410,6 +412,8 @@
         <input id="capital-martingale" type="number" placeholder="Capital ($)" class="p-2 bg-gray-800 text-white rounded" min="1">
         <input id="risk-percent-martingale" type="number" placeholder="Initial Risk (%)" class="p-2 bg-gray-800 text-white rounded" min="0.1" max="100" step="0.1">
         <input id="payout-percent-martingale" type="number" placeholder="Payout (%)" class="p-2 bg-gray-800 text-white rounded" min="1" max="100" step="0.1">
+        <input id="tp-martingale" type="number" placeholder="Take Profit ($)" class="p-2 bg-gray-800 text-white rounded" min="0">
+        <input id="sl-martingale" type="number" placeholder="Stop Loss ($)" class="p-2 bg-gray-800 text-white rounded" min="0">
       </div>
       <button id="start-session-martingale" class="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Start Session</button>
       <button id="end-session-martingale" class="mt-4 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 hidden">End Session</button>
@@ -604,6 +608,8 @@
       positionSize: 0,
       step: 0,
       multiplier: 1,
+      takeProfit: 0,
+      stopLoss: 0
     };
 
     function showAlert(message, type = 'info') {
@@ -685,11 +691,11 @@
       });
     }
 
-    function endSession() {
+    function endSession(message, type) {
       session.active = false;
       sessionStorage.setItem('binarySession', JSON.stringify(session));
       tradePlanTable.innerHTML = '';
-      showAlert('Session ended. Start a new session to continue.', 'info');
+      showAlert(message, type);
       newSessionBtn.classList.remove('hidden');
       startSessionFixed.classList.add('hidden');
       startSessionMartingale.classList.add('hidden');
@@ -703,7 +709,7 @@
         if (session.currentCapital < session.positionSize * session.multiplier) {
           showAlert('STOP: Insufficient capital!', 'error');
         }
-        endSession();
+        endSession('Session ended due to insufficient capital.', 'error');
         return;
       }
 
@@ -738,6 +744,12 @@
         }
         updateBalance();
         updateCharts();
+        // Check Take Profit
+        if (session.takeProfit > 0 && (session.currentCapital - session.capital) >= session.takeProfit) {
+          endSession('Congratulations! Take Profit reached!', 'success');
+          confetti.addConfetti();
+          return;
+        }
         showNextTrade();
       });
 
@@ -757,6 +769,11 @@
         }
         updateBalance();
         updateCharts();
+        // Check Stop Loss
+        if (session.stopLoss > 0 && (session.capital - session.currentCapital) >= session.stopLoss) {
+          endSession("It's alright, Stop Loss reached. Better luck next time!", 'error');
+          return;
+        }
         showNextTrade();
       });
     }
@@ -789,9 +806,11 @@
       const capital = parseFloat(document.getElementById('capital-fixed').value);
       const riskPercent = parseFloat(document.getElementById('risk-percent-fixed').value) / 100;
       const payoutPercent = parseFloat(document.getElementById('payout-percent-fixed').value) / 100;
+      const takeProfit = parseFloat(document.getElementById('tp-fixed').value) || 0;
+      const stopLoss = parseFloat(document.getElementById('sl-fixed').value) || 0;
 
       if (!capital || !riskPercent || !payoutPercent) {
-        showAlert('Please fill all fields!', 'error');
+        showAlert('Please fill all required fields (Capital, Risk %, Payout %)!', 'error');
         return;
       }
 
@@ -806,6 +825,8 @@
         positionSize,
         step: 0,
         multiplier: 1,
+        takeProfit,
+        stopLoss
       };
       sessionStorage.setItem('binarySession', JSON.stringify(session));
       startSessionFixed.classList.add('hidden');
@@ -821,9 +842,11 @@
       const capital = parseFloat(document.getElementById('capital-martingale').value);
       const riskPercent = parseFloat(document.getElementById('risk-percent-martingale').value) / 100;
       const payoutPercent = parseFloat(document.getElementById('payout-percent-martingale').value) / 100;
+      const takeProfit = parseFloat(document.getElementById('tp-martingale').value) || 0;
+      const stopLoss = parseFloat(document.getElementById('sl-martingale').value) || 0;
 
       if (!capital || !riskPercent || !payoutPercent) {
-        showAlert('Please fill all fields!', 'error');
+        showAlert('Please fill all required fields (Capital, Risk %, Payout %)!', 'error');
         return;
       }
 
@@ -838,6 +861,8 @@
         positionSize,
         step: 0,
         multiplier: 1,
+        takeProfit,
+        stopLoss
       };
       sessionStorage.setItem('binarySession', JSON.stringify(session));
       startSessionMartingale.classList.add('hidden');
@@ -849,8 +874,8 @@
       showNextTrade();
     });
 
-    endSessionFixed.addEventListener('click', endSession);
-    endSessionMartingale.addEventListener('click', endSession);
+    endSessionFixed.addEventListener('click', () => endSession('Session ended manually.', 'info'));
+    endSessionMartingale.addEventListener('click', () => endSession('Session ended manually.', 'info'));
 
     newSessionBtn.addEventListener('click', () => {
       session = { active: false };
@@ -871,3 +896,6 @@
   </script>
 </body>
 </html>
+
+
+make the risk, tp adn sl in $
