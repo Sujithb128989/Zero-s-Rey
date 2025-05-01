@@ -403,9 +403,11 @@
         <input id="stop-loss-fixed" type="number" placeholder="Stop Loss (pips)" class="p-2 bg-gray-800 text-white rounded" min="1">
         <input id="pip-value-fixed" type="number" placeholder="Pip Value ($)" class="p-2 bg-gray-800 text-white rounded" min="0.01" step="0.01">
         <input id="rr-ratio-fixed" type="number" placeholder="RR Ratio (e.g., 2)" class="p-2 bg-gray-800 text-white rounded" min="0.1" step="0.1">
+        <input id="trade-count-fixed" type="number" placeholder="Number of Trades" class="p-2 bg-gray-800 text-white rounded" min="1">
       </div>
+      <p class="text-sm text-yellow-400 mt-2">Note: Ideally, take only 2 trades per day for optimal risk management.</p>
       <button id="start-session-fixed" class="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Start Session</button>
-      <button id="end-session-fixed" classarine="mt-4 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 hidden">End Session</button>
+      <button id="end-session-fixed" class="mt-4 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 hidden">End Session</button>
     </div>
     <div id="martingale-form" class="mb-6 hidden">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-lg mx-auto">
@@ -414,7 +416,9 @@
         <input id="stop-loss-martingale" type="number" placeholder="Stop Loss (pips)" class="p-2 bg-gray-800 text-white rounded" min="1">
         <input id="pip-value-martingale" type="number" placeholder="Pip Value ($)" class="p-2 bg-gray-800 text-white rounded" min="0.01" step="0.01">
         <input id="rr-ratio-martingale" type="number" placeholder="RR Ratio (e.g., 2)" class="p-2 bg-gray-800 text-white rounded" min="0.1" step="0.1">
+        <input id="trade-count-martingale" type="number" placeholder="Number of Trades" class="p-2 bg-gray-800 text-white rounded" min="1">
       </div>
+      <p class="text-sm text-yellow-400 mt-2">Note: Ideally, take only 2 trades per day for optimal risk management.</p>
       <button id="start-session-martingale" class="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Start Session</button>
       <button id="end-session-martingale" class="mt-4 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 hidden">End Session</button>
     </div>
@@ -449,7 +453,8 @@
         <canvas id="win-percent-chart" width="200" height="200" style="border: 2px solid #ff0000; border-radius: 8px;"></canvas>
       </div>
     </div>
-   <footer>
+  </section>
+  <footer>
     <div class="footer-content">
       <span>© 2025 REY. All rights reserved |</span>
       <a href="https://t.me/groxmcislitt" target="_blank">
@@ -609,6 +614,7 @@
       lotSize: 0,
       step: 0,
       multiplier: 1,
+      maxTrades: 0,
     };
 
     function showAlert(message, type = 'info') {
@@ -712,6 +718,12 @@
         return;
       }
 
+      if (session.step >= session.maxTrades) {
+        showAlert('Maximum trades reached for this session!', 'info');
+        endSession();
+        return;
+      }
+
       session.step++;
       const currentLotSize = session.lotSize * session.multiplier;
       const positionSize = currentLotSize * session.stopLoss * session.pipValue;
@@ -800,9 +812,10 @@
       const stopLoss = parseFloat(document.getElementById('stop-loss-fixed').value);
       const pipValue = parseFloat(document.getElementById('pip-value-fixed').value);
       const rrRatio = parseFloat(document.getElementById('rr-ratio-fixed').value);
+      const maxTrades = parseInt(document.getElementById('trade-count-fixed').value);
 
-      if (!capital || !riskPercent || !stopLoss || !pipValue || !rrRatio) {
-        showAlert('Please fill all fields!', 'error');
+      if (!capital || !riskPercent || !stopLoss || !pipValue || !rrRatio || !maxTrades) {
+        showAlert('Please fill all fields, including number of trades!', 'error');
         return;
       }
 
@@ -819,6 +832,7 @@
         lotSize,
         step: 0,
         multiplier: 1,
+        maxTrades,
       };
       sessionStorage.setItem('forexSession', JSON.stringify(session));
       startSessionFixed.classList.add('hidden');
@@ -836,9 +850,10 @@
       const stopLoss = parseFloat(document.getElementById('stop-loss-martingale').value);
       const pipValue = parseFloat(document.getElementById('pip-value-martingale').value);
       const rrRatio = parseFloat(document.getElementById('rr-ratio-martingale').value);
+      const maxTrades = parseInt(document.getElementById('trade-count-martingale').value);
 
-      if (!capital || !riskPercent || !stopLoss || !pipValue || !rrRatio) {
-        showAlert('Please fill all fields!', 'error');
+      if (!capital || !riskPercent || !stopLoss || !pipValue || !rrRatio || !maxTrades) {
+        showAlert('Please fill all fields, including number of trades!', 'error');
         return;
       }
 
@@ -855,6 +870,7 @@
         lotSize,
         step: 0,
         multiplier: 1,
+        maxTrades,
       };
       sessionStorage.setItem('forexSession', JSON.stringify(session));
       startSessionMartingale.classList.add('hidden');
