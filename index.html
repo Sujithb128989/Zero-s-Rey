@@ -44,6 +44,7 @@
       height: 35px;
       width: auto;
       transition: transform 0.3s;
+      cursor: pointer;
     }
     .logo:hover {
       transform: scale(1.1);
@@ -178,12 +179,12 @@
       opacity: 0;
     }
     .binary-side.visible {
-      animation: slideInRight 1s ease-out forwards;
       opacity: 1;
+      animation: slideInRight 1s ease-out forwards;
     }
     .forex-side.visible {
-      animation: slideInLeft 1s ease-out forwards;
       opacity: 1;
+      animation: slideInLeft 1s ease-out forwards;
     }
     .binary-side {
       background: url('https://images.unsplash.com/photo-1593672715438-d88a70629abe?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80') no-repeat center center;
@@ -335,6 +336,41 @@
     .footer-content img:hover {
       transform: scale(1.2);
     }
+    .spotlight-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 100;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    .spotlight-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .spotlight {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, transparent 70%);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .spotlight-text {
+      position: absolute;
+      color: #ffffff;
+      font-size: 0.9rem;
+      text-align: center;
+      max-width: 200px;
+      z-index: 101;
+    }
+    .hidden {
+      display: none;
+    }
     @media (max-width: 768px) {
       header {
         padding: 0.6rem 0.8rem;
@@ -423,6 +459,14 @@
       .footer-content span {
         margin-bottom: 0.5rem;
       }
+      .spotlight {
+        width: 80px;
+        height: 80px;
+      }
+      .spotlight-text {
+        font-size: 0.8rem;
+        max-width: 150px;
+      }
     }
     @keyframes fadeIn {
       0% { opacity: 0; transform: translateY(20px); }
@@ -440,8 +484,18 @@
 </head>
 <body>
   <div class="vanta-bg"></div>
+  <audio id="background-music" loop>
+    <source src="pics/dreams.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+  <div id="spotlight-overlay" class="spotlight-overlay hidden">
+    <div id="spotlight" class="spotlight"></div>
+    <div id="spotlight-text" class="spotlight-text">
+      <p>Clicking the logo will stop music</p>
+    </div>
+  </div>
   <header>
-    <a href="#home"><img src="https://images5.alphacoders.com/133/1334125.jpeg" alt="Rey Logo" class="logo"></a>
+    <a href="#home"><img id="logo" src="https://images5.alphacoders.com/133/1334125.jpeg" alt="Rey Logo" class="logo" onclick="toggleMusic()"></a>
     <nav>
       <a href="#home">Home</a>
       <a href="#courses" class="courses">Courses</a>
@@ -501,6 +555,20 @@
     </div>
   </footer>
   <script>
+    // Disable developer keys
+    document.addEventListener('keydown', function(event) {
+      if (
+        event.key === 'F12' ||
+        (event.ctrlKey && event.shiftKey && event.key === 'I') ||
+        (event.ctrlKey && event.key === 'U') ||
+        (event.ctrlKey && event.key === 'S')
+      ) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    });
+
+    // Vanta.js Background
     VANTA.WAVES({
       el: ".vanta-bg",
       mouseControls: true,
@@ -516,6 +584,57 @@
       waveSpeed: 0.75,
       zoom: 0.65
     });
+
+    // Music Control
+    const audio = document.getElementById('background-music');
+    const isHallOfShame = window.location.pathname.includes('hall-of-shame.html');
+
+    function initializeMusic() {
+      const musicState = sessionStorage.getItem('musicState');
+      const musicTime = sessionStorage.getItem('musicTime');
+      const storedTrack = sessionStorage.getItem('musicTrack');
+
+      if (!isHallOfShame) {
+        if (storedTrack !== 'dreams' && storedTrack !== null) {
+          sessionStorage.setItem('musicTrack', 'dreams');
+          audio.currentTime = 0;
+          audio.play();
+        } else {
+          if (musicState === 'playing' && storedTrack === 'dreams') {
+            audio.currentTime = parseFloat(musicTime) || 0;
+            audio.play();
+          } else if (musicState === 'paused') {
+            audio.currentTime = parseFloat(musicTime) || 0;
+            audio.pause();
+          } else {
+            audio.play();
+            sessionStorage.setItem('musicTrack', 'dreams');
+          }
+        }
+      }
+
+      audio.addEventListener('timeupdate', () => {
+        sessionStorage.setItem('musicTime', audio.currentTime);
+      });
+
+      audio.addEventListener('play', () => {
+        sessionStorage.setItem('musicState', 'playing');
+      });
+
+      audio.addEventListener('pause', () => {
+        sessionStorage.setItem('musicState', 'paused');
+      });
+    }
+
+    function toggleMusic() {
+      if (audio.paused) {
+        audio.play();
+        sessionStorage.setItem('musicState', 'playing');
+      } else {
+        audio.pause();
+        sessionStorage.setItem('musicState', 'paused');
+      }
+    }
 
     // Hero Typewriter
     const typewriter = document.getElementById('typewriter');
@@ -583,7 +702,7 @@
     }
     setTimeout(typeInfo, 1000);
 
-    // Versus Section Animation on Scroll
+    // Versus Section Animation
     const versusContainer = document.querySelector('.versus-container');
     const binarySide = document.querySelector('.binary-side');
     const forexSide = document.querySelector('.forex-side');
@@ -599,6 +718,41 @@
     }, { threshold: 0.3 });
 
     observer.observe(versusContainer);
+
+    // Spotlight Effect
+    const spotlightOverlay = document.getElementById('spotlight-overlay');
+    const spotlight = document.getElementById('spotlight');
+    const spotlightText = document.getElementById('spotlight-text');
+    const logo = document.getElementById('logo');
+
+    function showSpotlight() {
+      if (!sessionStorage.getItem('spotlightShown')) {
+        const rect = logo.getBoundingClientRect();
+        spotlight.style.left = `${rect.left + rect.width / 2}px`;
+        spotlight.style.top = `${rect.top + rect.height / 2}px`;
+        spotlightText.style.left = `${rect.left + rect.width / 2}px`;
+        spotlightText.style.top = `${rect.top + rect.height + 20}px`;
+        spotlightOverlay.classList.remove('hidden');
+        spotlightOverlay.classList.add('active');
+        sessionStorage.setItem('spotlightShown', 'true');
+      }
+    }
+
+    function closeSpotlight() {
+      spotlightOverlay.classList.remove('active');
+      setTimeout(() => {
+        spotlightOverlay.classList.add('hidden');
+      }, 500);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        initializeMusic();
+        showSpotlight();
+      }, 100);
+    });
+
+    spotlightOverlay.addEventListener('click', closeSpotlight);
   </script>
 </body>
 </html>
