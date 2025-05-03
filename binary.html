@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Binary Options Risk Manager</title>
   <link rel="icon" type="image/x-icon" href="pics/favicon.ico">
   <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@700&family=Source+Code+Pro&family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -15,11 +15,13 @@
       box-sizing: border-box;
       font-family: 'Source Code Pro', monospace;
       scroll-behavior: smooth;
+      -webkit-tap-highlight-color: transparent;
     }
     body {
       background: #000000;
       color: #cccccc;
       overflow-x: hidden;
+      touch-action: manipulation;
     }
     body.light-mode {
       background: #ffffff;
@@ -27,7 +29,7 @@
     }
     header {
       background: rgba(0, 0, 0, 0.9);
-      padding: 0.6rem 0.8rem;
+      padding: 0.5rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -40,7 +42,7 @@
       background: rgba(255, 255, 255, 0.9);
     }
     .logo {
-      height: 35px;
+      height: 30px;
       width: auto;
       transition: transform 0.3s;
       cursor: pointer;
@@ -52,7 +54,7 @@
       color: #666666;
       text-decoration: none;
       margin: 0 0.5rem;
-      font-size: 1rem;
+      font-size: 0.9rem;
       transition: color 0.3s;
     }
     body.light-mode nav a {
@@ -77,14 +79,14 @@
       color: #cccccc;
       cursor: pointer;
       z-index: 11;
-      margin-left: 0.5rem;
+      margin-right: 0.5rem;
     }
     body.light-mode .hamburger {
       color: #333333;
     }
     .hamburger-menu {
       display: none;
-      position: absolute;
+      position: fixed;
       top: 50px;
       right: 0;
       background: rgba(0, 0, 0, 0.95);
@@ -101,7 +103,7 @@
       color: #666666;
       text-decoration: none;
       padding: 0.6rem 1.5rem;
-      font-size: 1rem;
+      font-size: 0.9rem;
       transition: color 0.3s;
     }
     body.light-mode .hamburger-menu a {
@@ -124,17 +126,17 @@
     }
     .main-section {
       text-align: center;
-      padding: 4rem 1rem;
+      padding: 4rem 0.5rem;
       min-height: 100vh;
       position: relative;
       z-index: 1;
-      margin-bottom: 2rem;
+      margin-bottom: 1rem;
     }
     footer {
       background: rgba(0, 0, 0, 0.95);
-      padding: 0.8rem;
+      padding: 0.8rem 0.5rem;
       text-align: center;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       color: #ffffff;
       position: relative;
       border-top: 1px solid #ff0000;
@@ -149,8 +151,9 @@
       justify-content: center;
       align-items: center;
       gap: 0.5rem;
-      max-w-4xl;
+      max-width: 100%;
       margin: 0 auto;
+      flex-wrap: wrap;
     }
     .footer-content a {
       color: #ffffff;
@@ -162,7 +165,7 @@
       color: #333333;
     }
     .footer-content img {
-      height: 16px;
+      height: 14px;
       transition: transform 0.3s;
     }
     .footer-content img:hover {
@@ -189,8 +192,8 @@
     }
     .spotlight {
       position: absolute;
-      width: 100px;
-      height: 100px;
+      width: 60px;
+      height: 60px;
       background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, transparent 70%);
       border-radius: 50%;
       transform: translate(-50%, -50%);
@@ -198,9 +201,9 @@
     .spotlight-text {
       position: absolute;
       color: #ffffff;
-      font-size: 0.9rem;
+      font-size: 0.75rem;
       text-align: center;
-      max-width: 200px;
+      max-width: 120px;
       z-index: 101;
     }
     body.light-mode .spotlight-text {
@@ -208,13 +211,13 @@
     }
     .ads-section {
       text-align: center;
-      margin-top: 2.5rem;
-      padding-bottom: 2rem;
+      margin-top: 1.5rem;
+      padding-bottom: 1rem;
     }
     .ad-box {
-      max-width: 728px;
-      min-height: 90px;
-      margin: 1rem auto;
+      max-width: 100%;
+      min-height: 60px;
+      margin: 0.5rem auto;
       border: 2px solid #ff0000;
       border-radius: 8px;
       display: flex;
@@ -237,37 +240,39 @@
     }
     @keyframes shake {
       0%, 100% { transform: translateX(0); }
-      25% { transform: translateX(-5px); }
-      50% { transform: translateX(5px); }
-      75% { transform: translateX(-5px); }
+      25% { transform: translateX(-3px); }
+      50% { transform: translateX(3px); }
+      75% { transform: translateX(-3px); }
     }
     @keyframes fadeIn {
-      0% { opacity: 0; transform: translateY(20px); }
+      0% { opacity: 0; transform: translateY(10px); }
       100% { opacity: 1; transform: translateY(0); }
     }
     /* Retro Trade Manager Styles */
     .trade-manager {
-      width: 640px;
-      height: 480px;
+      width: 100%;
+      max-width: 640px;
+      aspect-ratio: 4/3;
       background: #fff;
-      border: 16px solid #000;
+      border: 8px solid #000;
       position: relative;
       image-rendering: pixelated;
       overflow: hidden;
       font-family: 'Press Start 2P', cursive;
       margin: 0 auto;
+      touch-action: none;
     }
     .title-bar {
       position: absolute;
-      top: 16px;
-      left: 16px;
-      width: 592px;
+      top: 8px;
+      left: 8px;
+      width: calc(100% - 16px);
       background: #000;
       color: #fff;
-      font-size: 14px;
-      padding: 8px;
+      font-size: 12px;
+      padding: 6px;
       text-align: center;
-      border: 4px dotted #fff;
+      border: 3px dotted #fff;
       animation: blink 1s infinite;
     }
     @keyframes blink {
@@ -276,124 +281,141 @@
     }
     .lives-display {
       position: absolute;
-      top: 64px;
-      left: 32px;
-      font-size: 16px;
+      top: 40px;
+      left: 16px;
+      font-size: 12px;
       color: #000;
     }
     .trade-list {
       position: absolute;
-      top: 96px;
-      left: 32px;
-      width: 260px;
-      height: 200px;
+      top: 64px;
+      left: 16px;
+      width: calc(40% - 16px);
+      height: 140px;
       background: #fff;
-      border: 8px double #000;
-      padding: 8px;
-      font-size: 10px;
+      border: 6px double #000;
+      padding: 6px;
+      font-size: 8px;
       color: #000;
       overflow-y: auto;
       animation: flicker 0.2s infinite;
+      touch-action: pan-y;
     }
     @keyframes flicker {
       0%, 50% { border-color: #000; }
       51%, 100% { border-color: #666; }
     }
     .trade-item {
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       border-bottom: 2px dashed #666;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
+      gap: 4px;
     }
     .detail-item {
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
     .menu-panel {
       position: absolute;
-      top: 96px;
-      right: 32px;
-      width: 260px;
-      height: 200px;
+      top: 64px;
+      right: 16px;
+      width: calc(40% - 16px);
+      height: 140px;
       background: #fff;
-      border: 8px double #000;
-      padding: 8px;
+      border: 6px double #000;
+      padding: 6px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
       animation: flicker 0.2s infinite;
+      overflow-y: auto;
+      touch-action: pan-y;
     }
     .menu-option {
       background: #666;
-      border: 4px solid #000;
+      border: 3px solid #000;
       padding: 6px;
-      font-size: 10px;
+      font-size: 8px;
       color: #fff;
       text-align: center;
       cursor: pointer;
+      touch-action: manipulation;
+      min-height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .menu-option:hover {
       background: #999;
     }
+    .menu-option:active {
+      background: #555;
+      transform: scale(0.95);
+    }
     .menu-input {
       width: 100%;
-      padding: 4px;
-      font-size: 10px;
+      padding: 6px;
+      font-size: 8px;
       font-family: 'Press Start 2P', cursive;
       background: #fff;
       border: 2px solid #000;
       color: #000;
+      touch-action: manipulation;
     }
     .story-window {
       position: absolute;
-      bottom: 32px;
-      left: 32px;
-      width: 576px;
-      height: 100px;
+      bottom: 16px;
+      left: 16px;
+      width: calc(100% - 32px);
+      height: 80px;
       background: #fff;
-      border: 8px solid #000;
-      padding: 8px;
-      font-size: 12px;
+      border: 6px solid #000;
+      padding: 6px;
+      font-size: 10px;
       color: #000;
-      line-height: 1.5;
+      line-height: 1.4;
       white-space: pre-wrap;
+      overflow-y: auto;
+      touch-action: pan-y;
     }
     .corner-decoration {
       position: absolute;
-      width: 24px;
-      height: 24px;
+      width: 16px;
+      height: 16px;
       background: #000;
     }
     .corner-top-left {
       top: 0;
       left: 0;
-      border-bottom: 4px solid #fff;
-      border-right: 4px solid #fff;
+      border-bottom: 3px solid #fff;
+      border-right: 3px solid #fff;
     }
     .corner-top-right {
       top: 0;
       right: 0;
-      border-bottom: 4px solid #fff;
-      border-left: 4px solid #fff;
+      border-bottom: 3px solid #fff;
+      border-left: 3px solid #fff;
     }
     .corner-bottom-left {
       bottom: 0;
       left: 0;
-      border-top: 4px solid #fff;
-      border-right: 4px solid #fff;
+      border-top: 3px solid #fff;
+      border-right: 3px solid #fff;
     }
     .corner-bottom-right {
       bottom: 0;
       right: 0;
-      border-top: 4px solid #fff;
-      border-left: 4px solid #fff;
+      border-top: 3px solid #fff;
+      border-left: 3px solid #fff;
     }
     .npc {
       position: absolute;
-      top: 100px;
-      left: 100px;
-      width: 32px;
-      height: 32px;
+      top: 80px;
+      left: 80px;
+      width: 24px;
+      height: 24px;
       background: #ffcc99;
       border: 2px solid #000;
       box-sizing: border-box;
@@ -404,48 +426,48 @@
     .npc::before {
       content: '';
       position: absolute;
-      top: -8px;
-      left: 4px;
-      width: 24px;
-      height: 12px;
+      top: -6px;
+      left: 3px;
+      width: 18px;
+      height: 9px;
       background: #00ff00;
       border: 2px solid #000;
     }
     .npc::after {
       content: '';
       position: absolute;
-      top: 12px;
-      left: 8px;
-      width: 4px;
-      height: 4px;
+      top: 9px;
+      left: 6px;
+      width: 3px;
+      height: 3px;
       background: #000;
       border-radius: 50%;
     }
     .npc .right-eye {
       position: absolute;
-      top: 12px;
-      left: 20px;
-      width: 4px;
-      height: 4px;
+      top: 9px;
+      left: 15px;
+      width: 3px;
+      height: 3px;
       background: #000;
       border-radius: 50%;
     }
     .npc .arm-left {
       position: absolute;
-      top: 16px;
-      left: -4px;
-      width: 8px;
-      height: 12px;
+      top: 12px;
+      left: -3px;
+      width: 6px;
+      height: 9px;
       background: #ffcc99;
       border: 2px solid #000;
       transform-origin: center;
     }
     .npc .arm-right {
       position: absolute;
-      top: 16px;
-      right: -4px;
-      width: 8px;
-      height: 12px;
+      top: 12px;
+      right: -3px;
+      width: 6px;
+      height: 9px;
       background: #ffcc99;
       border: 2px solid #000;
       transform-origin: center;
@@ -479,14 +501,14 @@
     }
     @keyframes jump {
       0% { transform: translateY(0); }
-      50% { transform: translateY(-48px); }
+      50% { transform: translateY(-36px); }
       100% { transform: translateY(0); }
     }
     @keyframes wave {
       0% { transform: translateX(0); }
-      25% { transform: translateX(-10px); }
-      50% { transform: translateX(10px); }
-      75% { transform: translateX(-10px); }
+      25% { transform: translateX(-8px); }
+      50% { transform: translateX(8px); }
+      75% { transform: translateX(-8px); }
       100% { transform: translateX(0); }
     }
     .npc.wave .arm-right {
@@ -501,9 +523,9 @@
     }
     @keyframes dance {
       0% { transform: translateY(0) rotate(0); }
-      25% { transform: translateY(-10px) rotate(-12deg); }
+      25% { transform: translateY(-8px) rotate(-12deg); }
       50% { transform: translateY(0) rotate(0); }
-      75% { transform: translateY(-10px) rotate(12deg); }
+      75% { transform: translateY(-8px) rotate(12deg); }
       100% { transform: translateY(0) rotate(0); }
     }
     .npc.dance .arm-left,
@@ -523,7 +545,7 @@
     }
     @keyframes sleep {
       0% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
+      50% { transform: translateY(-4px); }
       100% { transform: translateY(0); }
     }
     .npc.sleep::after,
@@ -542,7 +564,7 @@
     @keyframes trip {
       0% { transform: translateY(0) rotate(0); }
       30% { transform: translateY(0) rotate(50deg); }
-      60% { transform: translateY(-12px) rotate(50deg); }
+      60% { transform: translateY(-8px) rotate(50deg); }
       100% { transform: translateY(0) rotate(0); }
     }
     @keyframes fall {
@@ -555,11 +577,11 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 24px;
+      font-size: 16px;
       color: #000;
       background: #fff;
-      border: 4px solid #000;
-      padding: 8px;
+      border: 3px solid #000;
+      padding: 6px;
       animation: winFade 2s ease-in-out;
       font-family: 'Press Start 2P', cursive;
     }
@@ -568,11 +590,11 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 24px;
+      font-size: 16px;
       color: #000;
       background: #fff;
-      border: 4px solid #000;
-      padding: 8px;
+      border: 3px solid #000;
+      padding: 6px;
       animation: lossFade 2s ease-in-out;
       font-family: 'Press Start 2P', cursive;
     }
@@ -591,8 +613,8 @@
       background: #000000;
       padding: 0.5rem 0;
       font-family: 'Press Start 2P', cursive;
-      font-size: 0.9rem;
-      margin-top: 60px;
+      font-size: 0.7rem;
+      margin-top: 50px;
       border: 2px dotted #ff0000;
       animation: flicker 0.2s infinite;
     }
@@ -610,10 +632,10 @@
     }
     @media (max-width: 768px) {
       header {
-        padding: 0.6rem 0.8rem;
+        padding: 0.5rem;
       }
       .logo {
-        height: 30px;
+        height: 28px;
       }
       nav {
         display: none;
@@ -622,84 +644,154 @@
         display: block;
       }
       .main-section {
-        padding: 3rem 0.8rem;
-        margin-bottom: 1.5rem;
+        padding: 3rem 0.5rem;
+        margin-bottom: 1rem;
       }
       .marquee-container {
-        font-size: 0.7rem;
-        margin-top: 50px;
+        font-size: 0.65rem;
+        margin-top: 48px;
       }
       footer {
-        padding: 0.6rem 0.8rem;
+        padding: 0.6rem 0.5rem;
       }
       .footer-content {
         flex-direction: column;
         gap: 0.5rem;
       }
       .footer-content a {
-        margin: 0.5rem 0;
+        margin: 0.3rem 0;
       }
       .spotlight {
-        width: 80px;
-        height: 80px;
+        width: 50px;
+        height: 50px;
       }
       .spotlight-text {
-        font-size: 0.8rem;
-        max-width: 150px;
+        font-size: 0.7rem;
+        max-width: 100px;
       }
       .ads-section {
         margin-top: 1rem;
-        padding-bottom: 1.5rem;
+        padding-bottom: 1rem;
       }
       .ad-box {
-        max-width: 100%;
-        min-height: 90px;
-        margin: 0.5rem auto;
+        min-height: 60px;
+        margin: 0.5rem;
       }
       .trade-manager {
         width: 100%;
-        height: auto;
-        aspect-ratio: 4/3;
+        max-width: 100%;
+        aspect-ratio: 4/4; /* Increased height for mobile */
+        border: 6px solid #000;
       }
       .title-bar {
-        width: calc(100% - 32px);
-        font-size: 12px;
-      }
-      .lives-display {
-        font-size: 14px;
-        top: 60px;
-      }
-      .trade-list, .menu-panel {
-        width: 40%;
-        height: 150px;
-        font-size: 8px;
-      }
-      .menu-input, .menu-option {
-        font-size: 8px;
+        font-size: 10px;
         padding: 4px;
       }
-      .story-window {
-        width: calc(100% - 64px);
-        height: 80px;
+      .lives-display {
         font-size: 10px;
+        top: 36px;
+        left: 12px;
+      }
+      .trade-list, .menu-panel {
+        width: calc(45% - 12px);
+        height: 120px;
+        font-size: 7px;
+        border: 4px double #000;
+        padding: 4px;
+        top: 60px;
+      }
+      .menu-input {
+        font-size: 7px;
+        padding: 4px;
+        min-height: 28px;
+      }
+      .menu-option {
+        font-size: 7px;
+        padding: 4px;
+        min-height: 28px;
+      }
+      .story-window {
+        bottom: 12px;
+        height: 60px;
+        font-size: 8px;
+        border: 4px solid #000;
+        padding: 4px;
+        top: 200px; /* Positioned below trade-list and menu-panel */
       }
       .win-animation, .loss-animation {
-        font-size: 16px;
+        font-size: 12px;
+        padding: 4px;
       }
       #win-loss-counter {
-        font-size: 1.125rem;
+        font-size: 0.9rem;
         gap: 0.5rem;
         margin-top: 0.5rem;
       }
       #equity-chart {
-        max-height: 250px;
+        max-height: 200px;
         max-width: 100%;
       }
       #win-percent-chart {
-        max-width: 150px;
-        width: 150px;
-        height: 150px;
+        max-width: 120px;
+        width: 120px;
+        height: 120px;
         margin-top: 0.5rem;
+      }
+      .npc {
+        width: 20px;
+        height: 20px;
+      }
+      .npc::before {
+        top: -5px;
+        left: 2px;
+        width: 16px;
+        height: 8px;
+      }
+      .npc::after {
+        top: 8px;
+        left: 5px;
+        width: 2px;
+        height: 2px;
+      }
+      .npc .right-eye {
+        top: 8px;
+        left: 13px;
+        width: 2px;
+        height: 2px;
+      }
+      .npc .arm-left, .npc .arm-right {
+        top: 10px;
+        width: 5px;
+        height: 8px;
+      }
+    }
+    @media (max-width: 480px) {
+      .trade-manager {
+        aspect-ratio: 4/4.5; /* Further increased height for smaller screens */
+      }
+      .trade-list, .menu-panel {
+        width: calc(48% - 10px);
+        height: 100px;
+        font-size: 6px;
+        top: 56px;
+      }
+      .menu-input, .menu-option {
+        font-size: 6px;
+        padding: 3px;
+        min-height: 24px;
+      }
+      .story-window {
+        height: 50px;
+        font-size: 7px;
+        top: 180px; /* Adjusted for smaller screens */
+      }
+      #equity-chart {
+        max-height: 180px;
+      }
+      #win-percent-chart {
+        max-width: 100px;
+        width: 100px;
+        height: 100px;
       }
     }
   </style>
@@ -712,11 +804,11 @@
   <div id="spotlight-overlay" class="spotlight-overlay hidden">
     <div id="spotlight" class="spotlight"></div>
     <div id="spotlight-text" class="spotlight-text">
-      <p>Clicking the logo will stop music</p>
+      <p>Tap logo to stop music</p>
     </div>
   </div>
   <header class="flex justify-between items-center">
-    <img id="logo" src="https://images5.alphacoders.com/133/1334125.jpeg" alt="Rey Logo" class="logo" onclick="toggleMusic()">
+    <img id="logo" src="https://images5.alphacoders.com/133/1334125.jpeg" alt="Rey Logo" class="logo" ontouchstart="toggleMusic()">
     <nav class="flex items-center">
       <a href="index.html#home" class="mx-2">Home</a>
       <a href="courses.html" class="courses mx-2">Courses</a>
@@ -733,11 +825,11 @@
   </header>
   <section class="main-section container mx-auto text-center">
     <div class="marquee-container">
-      <marquee scrollamount="5" onmouseover="this.stop()" onmouseout="this.start()">
+      <marquee scrollamount="5" onmouseover="this.stop()" onmouseout="this.start()" ontouchstart="this.stop()" ontouchend="this.start()">
         Want things your way? Leave a suggestion on our <a href="https://t.me/groxmcislitt" target="_blank">Telegram channel</a>
       </marquee>
     </div>
-    <div id="alerts" class="mb-6"></div>
+    <div id="alerts" class="mb-4"></div>
     <div class="trade-manager">
       <div class="title-bar">RISK MANAGER</div>
       <div class="lives-display" id="lives-display">LIVES: ♥♥♥</div>
@@ -754,14 +846,14 @@
         <div class="arm-right"></div>
       </div>
     </div>
-    <div class="mt-6">
-      <div id="win-loss-counter" class="text-xl font-bold flex justify-center items-center gap-4 mt-4"></div>
+    <div class="mt-4">
+      <div id="win-loss-counter" class="text-lg font-bold flex justify-center items-center gap-3 mt-3"></div>
     </div>
-    <button id="new-session" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 hidden">Start New Session</button>
-    <div class="grid grid-cols-1 gap-4 mt-6 max-w-4xl mx-auto">
-      <canvas id="equity-chart" class="max-w-lg mx-auto" style="max-height: 300px;"></canvas>
-      <div class="max-w-[200px] mx-auto mt-4">
-        <canvas id="win-percent-chart" width="200" height="200" style="border: 2px solid #ff0000; border-radius: 8px;"></canvas>
+    <button id="new-session" class="mt-3 px-3 py-1.5 bg-blue-600 text-white rounded hover:bg-blue-700 hidden text-sm">Start New Session</button>
+    <div class="grid grid-cols-1 gap-3 mt-4 max-w-full mx-auto">
+      <canvas id="equity-chart" class="max-w-full mx-auto" style="max-height: 200px;"></canvas>
+      <div class="max-w-[120px] mx-auto mt-3">
+        <canvas id="win-percent-chart" width="120" height="120" style="border: 2px solid #ff0000; border-radius: 8px;"></canvas>
       </div>
     </div>
   </section>
@@ -854,7 +946,7 @@
       sessionStorage.setItem('musicState', 'paused');
     });
 
-    ['click', 'mousedown', 'mouseup', 'mousemove', 'mouseover', 'touchstart'].forEach(event => {
+    ['click', 'touchstart'].forEach(event => {
       document.addEventListener(event, startMusic, { once: true });
     });
 
@@ -870,7 +962,7 @@
         spotlight.style.left = `${rect.left + rect.width / 2}px`;
         spotlight.style.top = `${rect.top + rect.height / 2}px`;
         spotlightText.style.left = `${rect.left + rect.width / 2}px`;
-        spotlightText.style.top = `${rect.top + rect.height + 20}px`;
+        spotlightText.style.top = `${rect.top + rect.height + 15}px`;
         spotlightOverlay.classList.remove('hidden');
         spotlightOverlay.classList.add('active');
         sessionStorage.setItem('spotlightShown', 'true');
@@ -892,12 +984,13 @@
     });
 
     spotlightOverlay.addEventListener('click', closeSpotlight);
+    spotlightOverlay.addEventListener('touchstart', closeSpotlight);
 
     // NPC Setup
     const npc = document.getElementById('npc');
     const storyWindow = document.getElementById('story');
-    let npcX = 100;
-    let npcY = 100;
+    let npcX = 80;
+    let npcY = 80;
     let npcState = 'pop';
     let stateTimer = 0;
     let actionCount = 0;
@@ -939,20 +1032,24 @@
     };
 
     function getRandomPosition(isFall = false) {
+      const managerRect = document.querySelector('.trade-manager').getBoundingClientRect();
+      const scale = managerRect.width / 640;
+      const isMobile = window.innerWidth <= 768;
+      const maxY = isMobile ? 512 : 352; // Extended height for mobile
       if (isFall) {
         return {
-          x: Math.floor(Math.random() * (608 - 32 - 32)) + 32,
-          y: 32
+          x: Math.floor(Math.random() * (608 - 20 - 32)) * scale + 32,
+          y: 32 * scale
         };
       }
       const safeZones = [
         { xMin: 32, xMax: 608, yMin: 48, yMax: 96 },
-        { xMin: 320, xMax: 608, yMin: 96, yMax: 312 },
-        { xMin: 32, xMax: 308, yMin: 312, yMax: 352 }
+        { xMin: 320, xMax: 608, yMin: 96, yMax: isMobile ? 312 : 312 },
+        { xMin: 32, xMax: 308, yMin: isMobile ? 312 : 312, yMax: maxY }
       ];
       const zone = safeZones[Math.floor(Math.random() * safeZones.length)];
-      const x = Math.floor(Math.random() * (zone.xMax - zone.xMin - 32)) + zone.xMin;
-      const y = Math.floor(Math.random() * (zone.yMax - zone.yMin - 32)) + zone.yMin;
+      const x = (Math.floor(Math.random() * (zone.xMax - zone.xMin - 20)) + zone.xMin) * scale;
+      const y = (Math.floor(Math.random() * (zone.yMax - zone.yMin - 20)) + zone.yMin) * scale;
       return { x, y };
     }
 
@@ -981,8 +1078,12 @@
     }
 
     function updateNPC() {
+      const managerRect = document.querySelector('.trade-manager').getBoundingClientRect();
+      const scale = managerRect.width / 640;
+      const isMobile = window.innerWidth <= 768;
+      const maxY = isMobile ? 512 : 352;
       stateTimer++;
-      if (npcState === 'vanish' && stateTimer > Math.random() * 300 + 300) {
+      if (npcState === 'vanish' && stateTimer > Math.random() * 600 + 600) { // Increased delay for less frequent appearances
         const isFall = Math.random() < 0.2;
         const pos = getRandomPosition(isFall);
         npcX = pos.x;
@@ -999,20 +1100,20 @@
         actionCount++;
         npc.className = `npc ${npcState}`;
         stateTimer = 0;
-        npcX += Math.random() * 20 - 10;
-        npcY += Math.random() * 20 - 10;
-        npcX = Math.max(32, Math.min(608 - 32, npcX));
-        npcY = Math.max(48, Math.min(352, npcY));
+        npcX += (Math.random() * 20 - 10) * scale;
+        npcY += (Math.random() * 20 - 10) * scale;
+        npcX = Math.max(32 * scale, Math.min((608 - 20) * scale, npcX));
+        npcY = Math.max(48 * scale, Math.min(maxY * scale, npcY));
       } else if (actionStates.includes(npcState) && stateTimer > actionDurations[npcState]) {
         if (actionCount < 2 && Math.random() < 0.5) {
           npcState = actionStates[Math.floor(Math.random() * actionStates.length)];
           actionCount++;
           npc.className = `npc ${npcState}`;
           stateTimer = 0;
-          npcX += Math.random() * 20 - 10;
-          npcY += Math.random() * 20 - 10;
-          npcX = Math.max(32, Math.min(608 - 32, npcX));
-          npcY = Math.max(48, Math.min(352, npcY));
+          npcX += (Math.random() * 20 - 10) * scale;
+          npcY += (Math.random() * 20 - 10) * scale;
+          npcX = Math.max(32 * scale, Math.min((608 - 20) * scale, npcX));
+          npcY = Math.max(48 * scale, Math.min(maxY * scale, npcY));
         } else {
           npcState = 'vanish';
           npc.className = `npc ${npcState}`;
@@ -1022,7 +1123,7 @@
 
       if (npcState === 'fall') {
         const progress = Math.min(stateTimer / actionDurations.fall, 1);
-        npcY = 32 + (448 - 32) * progress;
+        npcY = (32 + (maxY - 32) * progress) * scale;
         npc.style.top = npcY + 'px';
       } else {
         npc.style.top = npcY + 'px';
@@ -1058,7 +1159,7 @@
     };
 
     function showAlert(message, type = 'info') {
-      alertsDiv.innerHTML = `<div class="p-4 mb-4 text-white rounded ${type === 'success' ? 'bg-green-600' : type === 'warning' ? 'bg-yellow-600' : type === 'error' ? 'bg-red-600' : 'bg-blue-600'}">${message}</div>`;
+      alertsDiv.innerHTML = `<div class="p-3 mb-3 text-white rounded text-sm ${type === 'success' ? 'bg-green-600' : type === 'warning' ? 'bg-yellow-600' : type === 'error' ? 'bg-red-600' : 'bg-blue-600'}">${message}</div>`;
     }
 
     function updateBalance() {
@@ -1107,7 +1208,7 @@
             label: 'Equity Curve',
             data: equity,
             borderColor: '#22c55e',
-            borderWidth: 3,
+            borderWidth: 2,
             fill: false,
             tension: 0.4,
           }],
@@ -1117,10 +1218,10 @@
           maintainAspectRatio: false,
           animation: { duration: 500 },
           scales: {
-            y: { beginAtZero: false, grid: { display: true }, ticks: { font: { size: 12 } } },
-            x: { grid: { display: true }, ticks: { font: { size: 12 } } },
+            y: { beginAtZero: false, grid: { display: true }, ticks: { font: { size: 10 } } },
+            x: { grid: { display: true }, ticks: { font: { size: 10 } } },
           },
-          plugins: { legend: { labels: { font: { size: 12 } } } },
+          plugins: { legend: { labels: { font: { size: 10 } } } },
         },
       });
 
@@ -1137,7 +1238,7 @@
         options: {
           responsive: true,
           plugins: {
-            legend: { position: 'bottom', labels: { font: { size: 12 } } },
+            legend: { position: 'bottom', labels: { font: { size: 10 } } },
           },
         },
       });
@@ -1184,58 +1285,67 @@
       tradeList.appendChild(tradeItem);
       tradeList.scrollTop = tradeList.scrollHeight;
 
-      document.getElementById(`win-btn-${session.step}`).addEventListener('click', () => {
-        const profit = parseFloat(document.getElementById(`win-btn-${session.step}`).dataset.profit);
-        session.currentCapital += profit;
-        tradeHistory.push({ outcome: 'win', profit, loss: 0 });
-        localStorage.setItem('binaryTradeHistory', JSON.stringify(tradeHistory));
-        showWinAnimation();
-        const winMessage = npcWinMessages[Math.floor(Math.random() * npcWinMessages.length)];
-        typeText(storyWindow, winMessage);
-        if (tradeHistory.slice(-3).every(t => t.outcome === 'win')) {
-          showAlert('Congratulations on a 3+ win streak!', 'success');
-        }
-        if (session.mode === 'martingale') {
-          session.multiplier = 1;
-        }
-        updateBalance();
-        updateCharts();
-        if (session.takeProfit > 0 && (session.currentCapital - session.capital) >= session.capital * session.takeProfit) {
-          endSession('Congratulations! Take Profit reached!', 'success');
+      const winBtn = document.getElementById(`win-btn-${session.step}`);
+      const lossBtn = document.getElementById(`loss-btn-${session.step}`);
+
+      ['click', 'touchstart'].forEach(event => {
+        winBtn.addEventListener(event, (e) => {
+          e.preventDefault();
+          const profit = parseFloat(winBtn.dataset.profit);
+          session.currentCapital += profit;
+          tradeHistory.push({ outcome: 'win', profit, loss: 0 });
+          localStorage.setItem('binaryTradeHistory', JSON.stringify(tradeHistory));
           showWinAnimation();
-          return;
-        }
-        showNextTrade();
+          const winMessage = npcWinMessages[Math.floor(Math.random() * npcWinMessages.length)];
+          typeText(storyWindow, winMessage);
+          if (tradeHistory.slice(-3).every(t => t.outcome === 'win')) {
+            showAlert('Congratulations on a 3+ win streak!', 'success');
+          }
+          if (session.mode === 'martingale') {
+            session.multiplier = 1;
+          }
+          updateBalance();
+          updateCharts();
+          if (session.takeProfit > 0 && (session.currentCapital - session.capital) >= session.capital * session.takeProfit) {
+            endSession('Congratulations! Take Profit reached!', 'success');
+            showWinAnimation();
+            return;
+          }
+          showNextTrade();
+        }, { once: true });
       });
 
-      document.getElementById(`loss-btn-${session.step}`).addEventListener('click', () => {
-        const loss = parseFloat(document.getElementById(`loss-btn-${session.step}`).dataset.loss);
-        session.currentCapital -= loss;
-        session.lives--;
-        tradeHistory.push({ outcome: 'loss', profit: 0, loss });
-        localStorage.setItem('binaryTradeHistory', JSON.stringify(tradeHistory));
-        tradeList.classList.add('shake');
-        setTimeout(() => tradeList.classList.remove('shake'), 500);
-        showLossAnimation();
-        const lossMessage = npcLossMessages[Math.floor(Math.random() * npcLossMessages.length)];
-        typeText(storyWindow, lossMessage);
-        if (tradeHistory.slice(-2).every(t => t.outcome === 'loss')) {
-          showAlert('Warning: 2+ loss streak detected!', 'warning');
-        }
-        if (session.mode === 'martingale') {
-          session.multiplier *= 2;
-        }
-        updateBalance();
-        updateCharts();
-        if (session.stopLoss > 0 && (session.capital - session.currentCapital) >= session.capital * session.stopLoss) {
-          endSession("It's alright, Stop Loss reached. Better luck next time!", 'error');
-          return;
-        }
-        if (session.lives <= 0) {
-          endSession("Game Over: No lives left!", 'error');
-          return;
-        }
-        showNextTrade();
+      ['click', 'touchstart'].forEach(event => {
+        lossBtn.addEventListener(event, (e) => {
+          e.preventDefault();
+          const loss = parseFloat(lossBtn.dataset.loss);
+          session.currentCapital -= loss;
+          session.lives--;
+          tradeHistory.push({ outcome: 'loss', profit: 0, loss });
+          localStorage.setItem('binaryTradeHistory', JSON.stringify(tradeHistory));
+          tradeList.classList.add('shake');
+          setTimeout(() => tradeList.classList.remove('shake'), 500);
+          showLossAnimation();
+          const lossMessage = npcLossMessages[Math.floor(Math.random() * npcLossMessages.length)];
+          typeText(storyWindow, lossMessage);
+          if (tradeHistory.slice(-2).every(t => t.outcome === 'loss')) {
+            showAlert('Warning: 2+ loss streak detected!', 'warning');
+          }
+          if (session.mode === 'martingale') {
+            session.multiplier *= 2;
+          }
+          updateBalance();
+          updateCharts();
+          if (session.stopLoss > 0 && (session.capital - session.currentCapital) >= session.capital * session.stopLoss) {
+            endSession("It's alright, Stop Loss reached. Better luck next time!", 'error');
+            return;
+          }
+          if (session.lives <= 0) {
+            endSession("Game Over: No lives left!", 'error');
+            return;
+          }
+          showNextTrade();
+        }, { once: true });
       });
     }
 
@@ -1246,14 +1356,21 @@
       `;
       tradeList.innerHTML = `<div class="detail-item">SELECT MODE</div>`;
 
-      document.getElementById('fixed-risk-tab').addEventListener('click', () => {
-        session.mode = 'fixed';
-        showInputForm('fixed');
-      });
+      const fixedTab = document.getElementById('fixed-risk-tab');
+      const martingaleTab = document.getElementById('martingale-tab');
 
-      document.getElementById('martingale-tab').addEventListener('click', () => {
-        session.mode = 'martingale';
-        showInputForm('martingale');
+      ['click', 'touchstart'].forEach(event => {
+        fixedTab.addEventListener(event, (e) => {
+          e.preventDefault();
+          session.mode = 'fixed';
+          showInputForm('fixed');
+        }, { once: true });
+
+        martingaleTab.addEventListener(event, (e) => {
+          e.preventDefault();
+          session.mode = 'martingale';
+          showInputForm('martingale');
+        }, { once: true });
       });
     }
 
@@ -1317,46 +1434,55 @@
         });
       });
 
-      document.getElementById(`start-session-${mode}`).addEventListener('click', () => {
-        const capital = parseFloat(document.getElementById(`capital-${mode}`).value);
-        const riskPercent = parseFloat(document.getElementById(`risk-percent-${mode}`).value) / 100;
-        const payoutPercent = parseFloat(document.getElementById(`payout-percent-${mode}`).value) / 100;
-        const takeProfit = parseFloat(document.getElementById(`tp-${mode}`).value) / 100 || 0;
-        const stopLoss = parseFloat(document.getElementById(`sl-${mode}`).value) / 100 || 0;
+      const startSessionBtn = document.getElementById(`start-session-${mode}`);
+      const endSessionBtn = document.getElementById(`end-session-${mode}`);
 
-        if (!capital || !riskPercent || !payoutPercent) {
-          showAlert('Please fill all required fields (Capital, Risk %, Payout %)!', 'error');
-          return;
-        }
+      ['click', 'touchstart'].forEach(event => {
+        startSessionBtn.addEventListener(event, (e) => {
+          e.preventDefault();
+          const capital = parseFloat(document.getElementById(`capital-${mode}`).value);
+          const riskPercent = parseFloat(document.getElementById(`risk-percent-${mode}`).value) / 100;
+          const payoutPercent = parseFloat(document.getElementById(`payout-percent-${mode}`).value) / 100;
+          const takeProfit = parseFloat(document.getElementById(`tp-${mode}`).value) / 100 || 0;
+          const stopLoss = parseFloat(document.getElementById(`sl-${mode}`).value) / 100 || 0;
 
-        const positionSize = capital * riskPercent;
-        const lives = stopLoss > 0 ? Math.floor((capital * stopLoss) / positionSize) || 3 : 3;
-        session = {
-          active: true,
-          mode,
-          capital,
-          currentCapital: capital,
-          riskPercent,
-          payoutPercent,
-          positionSize,
-          step: 0,
-          multiplier: 1,
-          takeProfit,
-          stopLoss,
-          lives
-        };
-        sessionStorage.setItem('binarySession', JSON.stringify(session));
-        document.getElementById(`start-session-${mode}`).classList.add('hidden');
-        document.getElementById(`end-session-${mode}`).classList.remove('hidden');
-        newSessionBtn.classList.add('hidden');
-        tradeHistory = [];
-        localStorage.setItem('binaryTradeHistory', JSON.stringify(tradeHistory));
-        tradeList.innerHTML = '';
-        updateBalance();
-        showNextTrade();
+          if (!capital || !riskPercent || !payoutPercent) {
+            showAlert('Please fill all required fields (Capital, Risk %, Payout %)!', 'error');
+            return;
+          }
+
+          const positionSize = capital * riskPercent;
+          const lives = stopLoss > 0 ? Math.floor((capital * stopLoss) / positionSize) || 3 : 3;
+          session = {
+            active: true,
+            mode,
+            capital,
+            currentCapital: capital,
+            riskPercent,
+            payoutPercent,
+            positionSize,
+            step: 0,
+            multiplier: 1,
+            takeProfit,
+            stopLoss,
+            lives
+          };
+          sessionStorage.setItem('binarySession', JSON.stringify(session));
+          startSessionBtn.classList.add('hidden');
+          endSessionBtn.classList.remove('hidden');
+          newSessionBtn.classList.add('hidden');
+          tradeHistory = [];
+          localStorage.setItem('binaryTradeHistory', JSON.stringify(tradeHistory));
+          tradeList.innerHTML = '';
+          updateBalance();
+          showNextTrade();
+        }, { once: true });
+
+        endSessionBtn.addEventListener(event, (e) => {
+          e.preventDefault();
+          endSession('Session ended manually.', 'info');
+        }, { once: true });
       });
-
-      document.getElementById(`end-session-${mode}`).addEventListener('click', () => endSession('Session ended manually.', 'info'));
     }
 
     newSessionBtn.addEventListener('click', () => {
@@ -1369,6 +1495,17 @@
       updateBalance();
       updateCharts();
     });
+    newSessionBtn.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      session = { active: false };
+      sessionStorage.setItem('binarySession', JSON.stringify(session));
+      newSessionBtn.classList.add('hidden');
+      tradeList.innerHTML = '';
+      alertsDiv.innerHTML = '';
+      showModeSelection();
+      updateBalance();
+      updateCharts();
+    }, { once: true });
 
     window.onload = () => {
       showModeSelection();
