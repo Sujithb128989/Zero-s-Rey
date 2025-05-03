@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Forex Risk Manager</title>
   <link rel="icon" type="image/x-icon" href="pics/favicon.ico">
-  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@700&family=Source+Code+Pro&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@700&family=Source+Code+Pro&family=Press+Start+2P&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     * {
       margin: 0;
@@ -131,18 +131,6 @@
       z-index: 1;
       margin-bottom: 2rem;
     }
-    .main-title {
-      font-family: 'Exo 2', sans-serif;
-      font-size: 3.5rem;
-      color: #ff0000;
-      text-shadow: 0 0 8px rgba(50, 50, 50, 0.3);
-      margin-bottom: 1.5rem;
-      animation: fadeIn 2s ease-in;
-    }
-    body.light-mode .main-title {
-      color: #cc0000;
-      text-shadow: none;
-    }
     footer {
       background: rgba(0, 0, 0, 0.95);
       padding: 0.8rem;
@@ -219,57 +207,8 @@
     body.light-mode .spotlight-text {
       color: #333333;
     }
-    .gif-container {
-      max-width: 300px;
-      margin: 1rem auto;
-      display: none;
-    }
-    .gif-container img {
-      width: 100%;
-      border-radius: 8px;
-      border: 2px solid #ff0000;
-      animation: fadeInOut 3s ease-in-out;
-    }
-    body.light-mode .gif-container img {
-      border-color: #cc0000;
-    }
-    .ads-section {
-      text-align: center;
-      margin-top: 2.5rem;
-      padding-bottom: 2rem;
-    }
-    .ad-box {
-      max-width: 728px;
-      min-height: 90px;
-      margin: 1rem auto;
-      border: 2px solid #ff0000;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #1f2937;
-      color: #ffffff;
-      animation: fadeIn 1s ease-in;
-    }
-    body.light-mode .ad-box {
-      border-color: #cc0000;
-      background: #e5e7eb;
-      color: #000000;
-    }
     .hidden {
       display: none;
-    }
-    .balance-window {
-      position: sticky;
-      top: 60px;
-      background: rgba(0, 0, 0, 0.8);
-      padding: 1rem;
-      margin-bottom: 1rem;
-      border-radius: 8px;
-      z-index: 5;
-    }
-    body.light-mode .balance-window {
-      background: rgba(255, 255, 255, 0.8);
     }
     .shake {
       animation: shake 0.5s;
@@ -280,11 +219,331 @@
       50% { transform: translateX(5px); }
       75% { transform: translateX(-5px); }
     }
-    @keyframes fadeInOut {
-      0% { opacity: 0; transform: scale(0.9); }
-      10% { opacity: 1; transform: scale(1); }
-      90% { opacity: 1; transform: scale(1); }
-      100% { opacity: 0; transform: scale(0.9); }
+    /* Retro Trade Manager Styles */
+    .trade-manager {
+      width: 640px;
+      height: 480px;
+      background: #fff;
+      border: 16px solid #000;
+      position: relative;
+      image-rendering: pixelated;
+      overflow: hidden;
+      font-family: 'Press Start 2P', cursive;
+      margin: 0 auto;
+    }
+    .title-bar {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      width: 592px;
+      background: #000;
+      color: #fff;
+      font-size: 14px;
+      padding: 8px;
+      text-align: center;
+      border: 4px dotted #fff;
+      animation: blink 1s infinite;
+    }
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0.5; }
+    }
+    #trade-plan {
+      position: absolute;
+      top: 96px;
+      left: 32px;
+      width: 260px;
+      height: 200px;
+      background: #fff;
+      border: 8px double #000;
+      padding: 8px;
+      font-size: 10px;
+      color: #000;
+      overflow-y: auto;
+      animation: flicker 0.2s infinite;
+    }
+    @keyframes flicker {
+      0%, 50% { border-color: #000; }
+      51%, 100% { border-color: #666; }
+    }
+    #trade-plan th,
+    #trade-plan td {
+      padding: 4px;
+      text-align: center;
+    }
+    #trade-plan button {
+      background: #666;
+      border: 2px solid #000;
+      padding: 2px 4px;
+      font-size: 8px;
+      color: #fff;
+      cursor: pointer;
+    }
+    #trade-plan button:hover {
+      background: #999;
+    }
+    .menu-panel {
+      position: absolute;
+      top: 96px;
+      right: 32px;
+      width: 260px;
+      height: 200px;
+      background: #fff;
+      border: 8px double #000;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      animation: flicker 0.2s infinite;
+    }
+    .menu-option {
+      background: #666;
+      border: 4px solid #000;
+      padding: 6px;
+      font-size: 10px;
+      color: #fff;
+      text-align: center;
+      cursor: pointer;
+    }
+    .menu-option:hover {
+      background: #999;
+    }
+    .menu-input {
+      width: 100%;
+      padding: 4px;
+      font-size: 10px;
+      font-family: 'Press Start 2P', cursive;
+      background: #fff;
+      border: 2px solid #000;
+      color: #000;
+    }
+    .story-window {
+      position: absolute;
+      bottom: 32px;
+      left: 32px;
+      width: 576px;
+      height: 100px;
+      background: #fff;
+      border: 8px solid #000;
+      padding: 8px;
+      font-size: 12px;
+      color: #000;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+    .corner-decoration {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      background: #000;
+    }
+    .corner-top-left {
+      top: 0;
+      left: 0;
+      border-bottom: 4px solid #fff;
+      border-right: 4px solid #fff;
+    }
+    .corner-top-right {
+      top: 0;
+      right: 0;
+      border-bottom: 4px solid #fff;
+      border-left: 4px solid #fff;
+    }
+    .corner-bottom-left {
+      bottom: 0;
+      left: 0;
+      border-top: 4px solid #fff;
+      border-right: 4px solid #fff;
+    }
+    .corner-bottom-right {
+      bottom: 0;
+      right: 0;
+      border-top: 4px solid #fff;
+      border-left: 4px solid #fff;
+    }
+    .npc {
+      position: absolute;
+      top: 100px;
+      left: 100px;
+      width: 32px;
+      height: 32px;
+      background: #ffcc99;
+      border: 2px solid #000;
+      box-sizing: border-box;
+      overflow: visible;
+      transition: opacity 0.3s;
+      transform: scale(1);
+    }
+    .npc::before {
+      content: '';
+      position: absolute;
+      top: -8px;
+      left: 4px;
+      width: 24px;
+      height: 12px;
+      background: #00ff00;
+      border: 2px solid #000;
+    }
+    .npc::after {
+      content: '';
+      position: absolute;
+      top: 12px;
+      left: 8px;
+      width: 4px;
+      height: 4px;
+      background: #000;
+      border-radius: 50%;
+    }
+    .npc .right-eye {
+      position: absolute;
+      top: 12px;
+      left: 20px;
+      width: 4px;
+      height: 4px;
+      background: #000;
+      border-radius: 50%;
+    }
+    .npc .arm-left {
+      position: absolute;
+      top: 16px;
+      left: -4px;
+      width: 8px;
+      height: 12px;
+      background: #ffcc99;
+      border: 2px solid #000;
+      transform-origin: center;
+    }
+    .npc .arm-right {
+      position: absolute;
+      top: 16px;
+      right: -4px;
+      width: 8px;
+      height: 12px;
+      background: #ffcc99;
+      border: 2px solid #000;
+      transform-origin: center;
+    }
+    .npc.jump {
+      animation: jump 0.5s ease-in-out;
+    }
+    .npc.wave {
+      animation: wave 0.6s ease-in-out;
+    }
+    .npc.dance {
+      animation: dance 1.0s ease-in-out;
+    }
+    .npc.spin {
+      animation: spin 0.6s linear;
+    }
+    .npc.sleep {
+      animation: sleep 1.5s ease-in-out;
+    }
+    .npc.pop {
+      animation: pop 0.2s ease-in-out;
+    }
+    .npc.vanish {
+      animation: vanish 0.2s ease-in-out forwards;
+    }
+    .npc.trip {
+      animation: trip 0.6s ease-in-out;
+    }
+    .npc.fall {
+      animation: fall 1.0s ease-in-out;
+    }
+    @keyframes jump {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-48px); }
+      100% { transform: translateY(0); }
+    }
+    @keyframes wave {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      50% { transform: translateX(10px); }
+      75% { transform: translateX(-10px); }
+      100% { transform: translateX(0); }
+    }
+    .npc.wave .arm-right {
+      animation: wave-arm 0.6s ease-in-out;
+    }
+    @keyframes wave-arm {
+      0% { transform: rotate(0); }
+      25% { transform: rotate(50deg); }
+      50% { transform: rotate(0); }
+      75% { transform: rotate(50deg); }
+      100% { transform: rotate(0); }
+    }
+    @keyframes dance {
+      0% { transform: translateY(0) rotate(0); }
+      25% { transform: translateY(-10px) rotate(-12deg); }
+      50% { transform: translateY(0) rotate(0); }
+      75% { transform: translateY(-10px) rotate(12deg); }
+      100% { transform: translateY(0) rotate(0); }
+    }
+    .npc.dance .arm-left,
+    .npc.dance .arm-right {
+      animation: dance-arm 1.0s ease-in-out;
+    }
+    @keyframes dance-arm {
+      0% { transform: rotate(0); }
+      25% { transform: rotate(-25deg); }
+      50% { transform: rotate(0); }
+      75% { transform: rotate(25deg); }
+      100% { transform: rotate(0); }
+    }
+    @keyframes spin {
+      0% { transform: rotate(0); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes sleep {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+      100% { transform: translateY(0); }
+    }
+    .npc.sleep::after,
+    .npc.sleep .right-eye {
+      background: #666;
+    }
+    @keyframes pop {
+      0% { transform: scale(0); }
+      50% { transform: scale(1.3); }
+      100% { transform: scale(1); }
+    }
+    @keyframes vanish {
+      0% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0; transform: scale(0.5); }
+    }
+    @keyframes trip {
+      0% { transform: translateY(0) rotate(0); }
+      30% { transform: translateY(0) rotate(50deg); }
+      60% { transform: translateY(-12px) rotate(50deg); }
+      100% { transform: translateY(0) rotate(0); }
+    }
+    @keyframes fall {
+      0% { transform: translateY(0) rotate(0); }
+      50% { transform: translateY(0) rotate(15deg); }
+      100% { transform: translateY(0) rotate(0); }
+    }
+    .marquee-container {
+      width: 100%;
+      background: #000000;
+      padding: 0.5rem 0;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 0.9rem;
+      margin-top: 60px;
+      border: 2px dotted #ff0000;
+      animation: flicker 0.2s infinite;
+    }
+    body.light-mode .marquee-container {
+      background: #ffffff;
+      border-color: #cc0000;
+    }
+    .marquee-container a {
+      color: #ff0000;
+      text-decoration: none;
+    }
+    .marquee-container a:hover {
+      color: #cc0000;
+      text-decoration: underline;
     }
     @media (max-width: 768px) {
       header {
@@ -303,8 +562,9 @@
         padding: 3rem 0.8rem;
         margin-bottom: 1.5rem;
       }
-      .main-title {
-        font-size: 2.5rem;
+      .marquee-container {
+        font-size: 0.7rem;
+        margin-top: 50px;
       }
       footer {
         padding: 0.6rem 0.8rem;
@@ -324,37 +584,51 @@
         font-size: 0.8rem;
         max-width: 150px;
       }
-      .gif-container {
-        max-width: 200px;
-        margin: 0.5rem auto;
+      .trade-manager {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 4/3;
       }
-      .ads-section {
-        margin-top: 1rem;
-        padding-bottom: 1.5rem;
+      .title-bar {
+        width: calc(100% - 32px);
+        font-size: 12px;
       }
-      .ad-box {
-        max-width: 100%;
-        min-height: 90px;
-        margin: 0.5rem auto;
+      #trade-plan {
+        width: 40%;
+        height: 150px;
+        font-size: 8px;
+      }
+      #trade-plan th,
+      #trade-plan td {
+        padding: 2px;
+      }
+      #trade-plan button {
+        font-size: 6px;
+        padding: 1px 2px;
+      }
+      .menu-panel {
+        width: 40%;
+        height: 150px;
+        font-size: 8px;
+      }
+      .menu-input,
+      .menu-option {
+        font-size: 8px;
+        padding: 4px;
+      }
+      .story-window {
+        width: calc(100% - 64px);
+        height: 80px;
+        font-size: 10px;
       }
       #win-loss-counter {
-        font-size: 1.125rem; /* text-lg */
+        font-size: 1.125rem;
         gap: 0.5rem;
         margin-top: 0.5rem;
       }
       #equity-chart {
         max-height: 250px;
         max-width: 100%;
-      }
-      #win-percent-chart {
-        max-width: 150px;
-        width: 150px;
-        height: 150px;
-        margin-top: 0.5rem;
-      }
-      #trade-plan button {
-        min-width: 80px;
-        padding: 0.5rem;
       }
     }
     @keyframes fadeIn {
@@ -391,43 +665,25 @@
     </div>
   </header>
   <section class="main-section container mx-auto text-center">
-    <h1 class="main-title">Forex Risk Manager</h1>
-    <div class="flex justify-center mb-6">
-      <button id="fixed-risk-tab" class="px-4 py-2 bg-red-600 text-white rounded-l hover:bg-red-700">Fixed % Risk</button>
-      <button id="martingale-tab" class="px-4 py-2 bg-gray-600 text-white rounded-r hover:bg-gray-700">Martingale</button>
-    </div>
-    <div id="fixed-risk-form" class="mb-6">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-lg mx-auto">
-        <input id="capital-fixed" type="number" placeholder="Capital ($)" class="p-2 bg-gray-800 text-white rounded" min="1">
-        <input id="risk-percent-fixed" type="number" placeholder="Risk (%)" class="p-2 bg-gray-800 text-white rounded" min="0.1" max="100" step="0.1">
-        <input id="stop-loss-fixed" type="number" placeholder="Stop Loss (pips)" class="p-2 bg-gray-800 text-white rounded" min="1">
-        <input id="pip-value-fixed" type="number" placeholder="Pip Value ($)" class="p-2 bg-gray-800 text-white rounded" min="0.01" step="0.01">
-        <input id="rr-ratio-fixed" type="number" placeholder="RR Ratio (e.g., 2)" class="p-2 bg-gray-800 text-white rounded" min="0.1" step="0.1">
-        <input id="trade-count-fixed" type="number" placeholder="Number of Trades" class="p-2 bg-gray-800 text-white rounded" min="1">
-      </div>
-      <p class="text-sm text-yellow-400 mt-2">Note: Ideally, take only 2 trades per day for optimal risk management.</p>
-      <button id="start-session-fixed" class="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Start Session</button>
-      <button id="end-session-fixed" class="mt-4 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 hidden">End Session</button>
-    </div>
-    <div id="martingale-form" class="mb-6 hidden">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-lg mx-auto">
-        <input id="capital-martingale" type="number" placeholder="Capital ($)" class="p-2 bg-gray-800 text-white rounded" min="1">
-        <input id="risk-percent-martingale" type="number" placeholder="Initial Risk (%)" class="p-2 bg-gray-800 text-white rounded" min="0.1" max="100" step="0.1">
-        <input id="stop-loss-martingale" type="number" placeholder="Stop Loss (pips)" class="p-2 bg-gray-800 text-white rounded" min="1">
-        <input id="pip-value-martingale" type="number" placeholder="Pip Value ($)" class="p-2 bg-gray-800 text-white rounded" min="0.01" step="0.01">
-        <input id="rr-ratio-martingale" type="number" placeholder="RR Ratio (e.g., 2)" class="p-2 bg-gray-800 text-white rounded" min="0.1" step="0.1">
-        <input id="trade-count-martingale" type="number" placeholder="Number of Trades" class="p-2 bg-gray-800 text-white rounded" min="1">
-      </div>
-      <p class="text-sm text-yellow-400 mt-2">Note: Ideally, take only 2 trades per day for optimal risk management.</p>
-      <button id="start-session-martingale" class="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Start Session</button>
-      <button id="end-session-martingale" class="mt-4 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 hidden">End Session</button>
-    </div>
-    <div id="balance-window" class="balance-window max-w-lg mx-auto text-lg hidden">
-      Current Balance: $<span id="current-balance">0.00</span>
-    </div>
     <div id="alerts" class="mb-6"></div>
-    <div class="overflow-x-auto">
-      <table id="trade-plan" class="w-full max-w-4xl mx-auto text-left text-sm">
+    <div class="marquee-container">
+      <marquee scrollamount="5" onmouseover="this.stop()" onmouseout="this.start()">
+        Want things your way? Leave a suggestion on our <a href="https://t.me/groxmcislitt" target="_blank">Telegram channel</a>
+      </marquee>
+    </div>
+    <div class="trade-manager">
+      <div class="title-bar">FOREX RISK MANAGER</div>
+      <div class="story-window" id="story"></div>
+      <div class="corner-decoration corner-top-left"></div>
+      <div class="corner-decoration corner-top-right"></div>
+      <div class="corner-decoration corner-bottom-left"></div>
+      <div class="corner-decoration corner-bottom-right"></div>
+      <div class="npc" id="npc">
+        <div class="right-eye"></div>
+        <div class="arm-left"></div>
+        <div class="arm-right"></div>
+      </div>
+      <table id="trade-plan">
         <thead>
           <tr class="bg-gray-800">
             <th class="p-2">Trade #</th>
@@ -439,19 +695,13 @@
         </thead>
         <tbody></tbody>
       </table>
-    </div>
-    <div id="gif-container" class="gif-container hidden">
-      <img id="trade-gif" src="" alt="Trade Outcome">
+      <div class="menu-panel" id="menu-panel"></div>
     </div>
     <div class="mt-6">
       <div id="win-loss-counter" class="text-xl font-bold flex justify-center items-center gap-4 mt-4"></div>
     </div>
-    <button id="new-session" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 hidden">Start New Session</button>
     <div class="grid grid-cols-1 gap-4 mt-6 max-w-4xl mx-auto">
       <canvas id="equity-chart" class="max-w-lg mx-auto" style="max-height: 300px;"></canvas>
-      <div class="max-w-[200px] mx-auto mt-4">
-        <canvas id="win-percent-chart" width="200" height="200" style="border: 2px solid #ff0000; border-radius: 8px;"></canvas>
-      </div>
     </div>
   </section>
   <footer>
@@ -581,26 +831,153 @@
 
     spotlightOverlay.addEventListener('click', closeSpotlight);
 
+    // NPC Setup
+    const npc = document.getElementById('npc');
+    const storyWindow = document.getElementById('story');
+    let npcX = 100;
+    let npcY = 100;
+    let npcState = 'pop';
+    let stateTimer = 0;
+    let actionCount = 0;
+
+    const npcMessages = [
+      "Trade Buddy: Bulls are charging!",
+      "Trade Buddy: Bears are lurking!",
+      "Trade Buddy: Time to scalp!",
+      "Trade Buddy: Hold that position!",
+      "Trade Buddy: Volatility’s wild!",
+      "Trade Buddy: Check the charts!",
+      "Trade Buddy: Risk it for profit!",
+      "Trade Buddy: Steady now, trader!"
+    ];
+    const npcWinMessages = [
+      "Trade Buddy: Nailed that trade!",
+      "Trade Buddy: Profit in the bag!",
+      "Trade Buddy: You’re on fire!",
+      "Trade Buddy: Sweet victory!"
+    ];
+    const npcLossMessages = [
+      "Trade Buddy: Ouch, tough loss!",
+      "Trade Buddy: Shake it off!",
+      "Trade Buddy: Next one’s yours!",
+      "Trade Buddy: Market’s tricky!"
+    ];
+
+    const actionStates = ['jump', 'wave', 'dance', 'spin', 'sleep', 'trip', 'fall'];
+    const actionDurations = {
+      jump: 30,
+      wave: 36,
+      dance: 60,
+      spin: 36,
+      sleep: 90,
+      trip: 36,
+      fall: 60,
+      pop: 12,
+      vanish: 12
+    };
+
+    function getRandomPosition(isFall = false) {
+      if (isFall) {
+        return {
+          x: Math.floor(Math.random() * (608 - 32 - 32)) + 32,
+          y: 32
+        };
+      }
+      const safeZones = [
+        { xMin: 32, xMax: 608, yMin: 48, yMax: 96 },
+        { xMin: 320, xMax: 608, yMin: 96, yMax: 312 },
+        { xMin: 32, xMax: 308, yMin: 312, yMax: 352 }
+      ];
+      const zone = safeZones[Math.floor(Math.random() * safeZones.length)];
+      const x = Math.floor(Math.random() * (zone.xMax - zone.xMin - 32)) + zone.xMin;
+      const y = Math.floor(Math.random() * (zone.yMax - zone.yMin - 32)) + zone.yMin;
+      return { x, y };
+    }
+
+    let isTyping = false;
+    let typingTimeout = null;
+
+    function typeText(element, text, callback) {
+      if (isTyping) {
+        clearTimeout(typingTimeout);
+        isTyping = false;
+      }
+      element.textContent = '';
+      let index = 0;
+      isTyping = true;
+      function type() {
+        if (index < text.length) {
+          element.textContent += text.charAt(index);
+          index++;
+          typingTimeout = setTimeout(type, 50);
+        } else {
+          isTyping = false;
+          if (callback) callback();
+        }
+      }
+      type();
+    }
+
+    function updateNPC() {
+      stateTimer++;
+      if (npcState === 'vanish' && stateTimer > Math.random() * 300 + 300) {
+        const isFall = Math.random() < 0.2;
+        const pos = getRandomPosition(isFall);
+        npcX = pos.x;
+        npcY = pos.y;
+        npcState = 'pop';
+        actionCount = 0;
+        npc.className = `npc ${npcState}`;
+        npc.style.opacity = 1;
+        stateTimer = 0;
+        const message = npcMessages[Math.floor(Math.random() * npcMessages.length)];
+        typeText(storyWindow, message);
+      } else if (npcState === 'pop' && stateTimer > actionDurations.pop) {
+        npcState = actionStates[Math.floor(Math.random() * actionStates.length)];
+        actionCount++;
+        npc.className = `npc ${npcState}`;
+        stateTimer = 0;
+        npcX += Math.random() * 20 - 10;
+        npcY += Math.random() * 20 - 10;
+        npcX = Math.max(32, Math.min(608 - 32, npcX));
+        npcY = Math.max(48, Math.min(352, npcY));
+      } else if (actionStates.includes(npcState) && stateTimer > actionDurations[npcState]) {
+        if (actionCount < 2 && Math.random() < 0.5) {
+          npcState = actionStates[Math.floor(Math.random() * actionStates.length)];
+          actionCount++;
+          npc.className = `npc ${npcState}`;
+          stateTimer = 0;
+          npcX += Math.random() * 20 - 10;
+          npcY += Math.random() * 20 - 10;
+          npcX = Math.max(32, Math.min(608 - 32, npcX));
+          npcY = Math.max(48, Math.min(352, npcY));
+        } else {
+          npcState = 'vanish';
+          npc.className = `npc ${npcState}`;
+          stateTimer = 0;
+        }
+      }
+
+      if (npcState === 'fall') {
+        const progress = Math.min(stateTimer / actionDurations.fall, 1);
+        npcY = 32 + (448 - 32) * progress;
+        npc.style.top = npcY + 'px';
+      } else {
+        npc.style.top = npcY + 'px';
+      }
+
+      npc.style.left = npcX + 'px';
+      requestAnimationFrame(updateNPC);
+    }
+
     // Forex Logic
-    const fixedRiskTab = document.getElementById('fixed-risk-tab');
-    const martingaleTab = document.getElementById('martingale-tab');
-    const fixedRiskForm = document.getElementById('fixed-risk-form');
-    const martingaleForm = document.getElementById('martingale-form');
-    const startSessionFixed = document.getElementById('start-session-fixed');
-    const startSessionMartingale = document.getElementById('start-session-martingale');
-    const endSessionFixed = document.getElementById('end-session-fixed');
-    const endSessionMartingale = document.getElementById('end-session-martingale');
-    const newSessionBtn = document.getElementById('new-session');
     const tradePlanTable = document.querySelector('#trade-plan tbody');
-    const balanceWindow = document.getElementById('balance-window');
-    const currentBalanceSpan = document.getElementById('current-balance');
+    const menuPanel = document.getElementById('menu-panel');
     const alertsDiv = document.getElementById('alerts');
     const winLossCounter = document.getElementById('win-loss-counter');
-    const gifContainer = document.getElementById('gif-container');
-    const tradeGif = document.getElementById('trade-gif');
     let tradeHistory = JSON.parse(localStorage.getItem('forexTradeHistory')) || [];
-    let equityChart, winPercentChart;
     const confetti = new JSConfetti();
+    let equityChart;
 
     let session = {
       active: false,
@@ -621,19 +998,6 @@
       alertsDiv.innerHTML = `<div class="p-4 mb-4 text-white rounded ${type === 'success' ? 'bg-green-600' : type === 'warning' ? 'bg-yellow-600' : type === 'error' ? 'bg-red-600' : 'bg-blue-600'}">${message}</div>`;
     }
 
-    function updateBalance() {
-      currentBalanceSpan.textContent = session.currentCapital.toFixed(2);
-      balanceWindow.classList.remove('hidden');
-    }
-
-    function showGif(outcome) {
-      tradeGif.src = outcome === 'win' ? 'https://media.giphy.com/media/3o7btPCcdNniyf0ArS/giphy.gif' : 'https://media.giphy.com/media/8UGoRT4LS6z6g/giphy.gif';
-      gifContainer.style.display = 'block';
-      setTimeout(() => {
-        gifContainer.style.display = 'none';
-      }, 3000);
-    }
-
     function updateCharts() {
       const equity = tradeHistory.reduce((acc, trade, i) => {
         acc.push(acc[i] + (trade.outcome === 'win' ? trade.profit : -trade.loss));
@@ -644,7 +1008,6 @@
         else if (trade.outcome === 'loss') acc.losses = (acc.losses || 0) + 1;
         return acc;
       }, { wins: 0, losses: 0 });
-      const winPercent = tradeHistory.length ? (streaks.wins / tradeHistory.length) * 100 : 0;
 
       winLossCounter.innerHTML = `
         <span>Wins: <span class="text-green-500">${streaks.wins}</span></span>
@@ -676,37 +1039,16 @@
           plugins: { legend: { labels: { font: { size: 12 } } } },
         },
       });
-
-      if (winPercentChart) winPercentChart.destroy();
-      winPercentChart = new Chart(document.getElementById('win-percent-chart'), {
-        type: 'pie',
-        data: {
-          labels: ['Wins', 'Losses'],
-          datasets: [{
-            data: [winPercent, 100 - winPercent],
-            backgroundColor: ['#22c55e', '#ef4444'],
-          }],
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: { position: 'bottom', labels: { font: { size: 12 } } },
-          },
-        },
-      });
     }
 
-    function endSession() {
+    function endSession(message = 'Session ended.', type = 'info') {
       session.active = false;
       sessionStorage.setItem('forexSession', JSON.stringify(session));
       tradePlanTable.innerHTML = '';
-      showAlert('Session ended. Start a new session to continue.', 'info');
-      newSessionBtn.classList.remove('hidden');
-      startSessionFixed.classList.add('hidden');
-      startSessionMartingale.classList.add('hidden');
-      endSessionFixed.classList.add('hidden');
-      endSessionMartingale.classList.add('hidden');
-      balanceWindow.classList.add('hidden');
+      showAlert(message, type);
+      showModeSelection();
+      typeText(storyWindow, 'SESSION OVER');
+      updateCharts();
     }
 
     function showNextTrade() {
@@ -714,13 +1056,13 @@
         if (session.currentCapital < session.lotSize * session.stopLoss * session.pipValue) {
           showAlert('STOP: Insufficient capital!', 'error');
         }
-        endSession();
+        endSession('Session ended due to insufficient capital.', 'error');
         return;
       }
 
       if (session.step >= session.maxTrades) {
         showAlert('Maximum trades reached for this session!', 'info');
-        endSession();
+        endSession('Maximum trades reached.', 'info');
         return;
       }
 
@@ -729,178 +1071,149 @@
       const positionSize = currentLotSize * session.stopLoss * session.pipValue;
       const profit = positionSize * session.rrRatio;
 
-      tradePlanTable.innerHTML = `
-        <tr>
-          <td class="p-2">${session.step}</td>
-          <td class="p-2">${currentLotSize.toFixed(2)}</td>
-          <td class="p-2">$${positionSize.toFixed(2)}</td>
-          <td class="p-2">${profit > 0 ? '+' : '-'}$${Math.abs(profit).toFixed(2)}</td>
-          <td class="p-2">
-            <button id="win-btn" class="px-2 py-1 bg-green-600 rounded hover:bg-green-700" data-lot="${currentLotSize}" data-profit="${profit}" data-rr="${session.rrRatio}">Win</button>
-            <button id="loss-btn" class="px-2 py-1 bg-red-600 rounded hover:bg-red-700" data-lot="${currentLotSize}" data-loss="${positionSize}" data-rr="${session.rrRatio}">Loss</button>
-          </td>
-        </tr>
-      `;
+      tradePlanTable.innerHTML = ''; // Clear the details row before adding trade rows
 
-      document.getElementById('win-btn').addEventListener('click', () => {
-        const profit = parseFloat(document.getElementById('win-btn').dataset.profit);
-        const rr = parseFloat(document.getElementById('win-btn').dataset.rr);
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td class="p-2">${session.step}</td>
+        <td class="p-2">${currentLotSize.toFixed(2)}</td>
+        <td class="p-2">$${positionSize.toFixed(2)}</td>
+        <td class="p-2">${profit > 0 ? '+' : '-'}$${Math.abs(profit).toFixed(2)}</td>
+        <td class="p-2">
+          <button id="win-btn-${session.step}" class="win-btn" data-lot="${currentLotSize}" data-profit="${profit}" data-rr="${session.rrRatio}">Win</button>
+          <button id="loss-btn-${session.step}" class="loss-btn" data-lot="${currentLotSize}" data-loss="${positionSize}" data-rr="${session.rrRatio}">Loss</button>
+        </td>
+      `;
+      tradePlanTable.appendChild(row);
+      tradePlanTable.scrollTop = tradePlanTable.scrollHeight;
+
+      document.getElementById(`win-btn-${session.step}`).addEventListener('click', () => {
+        const profit = parseFloat(document.getElementById(`win-btn-${session.step}`).dataset.profit);
+        const rr = parseFloat(document.getElementById(`win-btn-${session.step}`).dataset.rr);
         session.currentCapital += profit;
         tradeHistory.push({ outcome: 'win', profit, loss: 0, rr });
         localStorage.setItem('forexTradeHistory', JSON.stringify(tradeHistory));
         confetti.addConfetti();
-        showGif('win');
+        const winMessage = npcWinMessages[Math.floor(Math.random() * npcWinMessages.length)];
+        typeText(storyWindow, winMessage);
         if (tradeHistory.slice(-3).every(t => t.outcome === 'win')) {
           showAlert('Congratulations on a 3+ win streak!', 'success');
         }
         if (session.mode === 'martingale') {
           session.multiplier = 1;
         }
-        updateBalance();
         updateCharts();
         showNextTrade();
       });
 
-      document.getElementById('loss-btn').addEventListener('click', () => {
-        const loss = parseFloat(document.getElementById('loss-btn').dataset.loss);
-        const rr = parseFloat(document.getElementById('loss-btn').dataset.rr);
+      document.getElementById(`loss-btn-${session.step}`).addEventListener('click', () => {
+        const loss = parseFloat(document.getElementById(`loss-btn-${session.step}`).dataset.loss);
+        const rr = parseFloat(document.getElementById(`loss-btn-${session.step}`).dataset.rr);
         session.currentCapital -= loss;
         tradeHistory.push({ outcome: 'loss', profit: 0, loss, rr });
         localStorage.setItem('forexTradeHistory', JSON.stringify(tradeHistory));
         tradePlanTable.classList.add('shake');
         setTimeout(() => tradePlanTable.classList.remove('shake'), 500);
-        showGif('loss');
+        const lossMessage = npcLossMessages[Math.floor(Math.random() * npcLossMessages.length)];
+        typeText(storyWindow, lossMessage);
         if (tradeHistory.slice(-2).every(t => t.outcome === 'loss')) {
           showAlert('Warning: 2+ loss streak detected!', 'warning');
         }
         if (session.mode === 'martingale') {
           session.multiplier *= 2;
         }
-        updateBalance();
         updateCharts();
         showNextTrade();
       });
     }
 
-    fixedRiskTab.addEventListener('click', () => {
-      fixedRiskTab.classList.add('bg-red-600');
-      fixedRiskTab.classList.remove('bg-gray-600');
-      martingaleTab.classList.add('bg-gray-600');
-      martingaleTab.classList.remove('bg-red-600');
-      fixedRiskForm.classList.remove('hidden');
-      martingaleForm.classList.add('hidden');
-      if (session.active) {
-        endSessionFixed.classList.remove('hidden');
-      }
-    });
+    function showModeSelection() {
+      menuPanel.innerHTML = `
+        <div id="fixed-risk-tab" class="menu-option">FIXED % RISK</div>
+        <div id="martingale-tab" class="menu-option">MARTINGALE</div>
+      `;
+      tradePlanTable.innerHTML = `<tr><td colspan="5" class="p-2">SELECT MODE</td></tr>`;
 
-    martingaleTab.addEventListener('click', () => {
-      martingaleTab.classList.add('bg-red-600');
-      martingaleTab.classList.remove('bg-gray-600');
-      fixedRiskTab.classList.add('bg-gray-600');
-      fixedRiskTab.classList.remove('bg-red-600');
-      martingaleForm.classList.remove('hidden');
-      fixedRiskForm.classList.add('hidden');
-      if (session.active) {
-        endSessionMartingale.classList.remove('hidden');
-      }
-    });
+      document.getElementById('fixed-risk-tab').addEventListener('click', () => {
+        session.mode = 'fixed';
+        showInputForm('fixed');
+      });
 
-    startSessionFixed.addEventListener('click', () => {
-      const capital = parseFloat(document.getElementById('capital-fixed').value);
-      const riskPercent = parseFloat(document.getElementById('risk-percent-fixed').value) / 100;
-      const stopLoss = parseFloat(document.getElementById('stop-loss-fixed').value);
-      const pipValue = parseFloat(document.getElementById('pip-value-fixed').value);
-      const rrRatio = parseFloat(document.getElementById('rr-ratio-fixed').value);
-      const maxTrades = parseInt(document.getElementById('trade-count-fixed').value);
+      document.getElementById('martingale-tab').addEventListener('click', () => {
+        session.mode = 'martingale';
+        showInputForm('martingale');
+      });
+    }
 
-      if (!capital || !riskPercent || !stopLoss || !pipValue || !rrRatio || !maxTrades) {
-        showAlert('Please fill all fields, including number of trades!', 'error');
-        return;
-      }
+    function showInputForm(mode) {
+      menuPanel.innerHTML = `
+        <input id="capital-${mode}" type="number" placeholder="CAPITAL ($)" class="menu-input" min="1">
+        <input id="risk-percent-${mode}" type="number" placeholder="RISK (%)" class="menu-input" min="0.1" max="100" step="0.1">
+        <input id="stop-loss-${mode}" type="number" placeholder="STOP LOSS (pips)" class="menu-input" min="1">
+        <input id="pip-value-${mode}" type="number" placeholder="PIP VALUE ($)" class="menu-input" min="0.01" step="0.01">
+        <input id="rr-ratio-${mode}" type="number" placeholder="RR RATIO (e.g., 2)" class="menu-input" min="0.1" step="0.1">
+        <input id="trade-count-${mode}" type="number" placeholder="NUMBER OF TRADES" class="menu-input" min="1">
+        <div id="start-session-${mode}" class="menu-option">START SESSION</div>
+        <div id="end-session-${mode}" class="menu-option hidden">END SESSION</div>
+      `;
+      tradePlanTable.innerHTML = `<tr><td colspan="5" class="p-2">ENTER DETAILS</td></tr>`;
 
-      const lotSize = (capital * riskPercent) / (stopLoss * pipValue);
-      session = {
-        active: true,
-        mode: 'fixed',
-        capital,
-        currentCapital: capital,
-        riskPercent,
-        stopLoss,
-        pipValue,
-        rrRatio,
-        lotSize,
-        step: 0,
-        multiplier: 1,
-        maxTrades,
-      };
-      sessionStorage.setItem('forexSession', JSON.stringify(session));
-      startSessionFixed.classList.add('hidden');
-      endSessionFixed.classList.remove('hidden');
-      newSessionBtn.classList.add('hidden');
-      tradeHistory = [];
-      localStorage.setItem('forexTradeHistory', JSON.stringify(tradeHistory));
-      updateBalance();
-      showNextTrade();
-    });
+      document.getElementById(`start-session-${mode}`).addEventListener('click', () => {
+        const capital = parseFloat(document.getElementById(`capital-${mode}`).value);
+        const riskPercent = parseFloat(document.getElementById(`risk-percent-${mode}`).value) / 100;
+        const stopLoss = parseFloat(document.getElementById(`stop-loss-${mode}`).value);
+        const pipValue = parseFloat(document.getElementById(`pip-value-${mode}`).value);
+        const rrRatio = parseFloat(document.getElementById(`rr-ratio-${mode}`).value);
+        const maxTrades = parseInt(document.getElementById(`trade-count-${mode}`).value);
 
-    startSessionMartingale.addEventListener('click', () => {
-      const capital = parseFloat(document.getElementById('capital-martingale').value);
-      const riskPercent = parseFloat(document.getElementById('risk-percent-martingale').value) / 100;
-      const stopLoss = parseFloat(document.getElementById('stop-loss-martingale').value);
-      const pipValue = parseFloat(document.getElementById('pip-value-martingale').value);
-      const rrRatio = parseFloat(document.getElementById('rr-ratio-martingale').value);
-      const maxTrades = parseInt(document.getElementById('trade-count-martingale').value);
+        if (!capital || !riskPercent || !stopLoss || !pipValue || !rrRatio || !maxTrades) {
+          showAlert('Please fill all fields, including number of trades!', 'error');
+          return;
+        }
 
-      if (!capital || !riskPercent || !stopLoss || !pipValue || !rrRatio || !maxTrades) {
-        showAlert('Please fill all fields, including number of trades!', 'error');
-        return;
-      }
+        // Display entered details in the trade plan table
+        tradePlanTable.innerHTML = `
+          <tr><td class="p-2">Capital</td><td class="p-2" colspan="4">$${capital.toFixed(2)}</td></tr>
+          <tr><td class="p-2">Risk %</td><td class="p-2" colspan="4">${(riskPercent * 100).toFixed(1)}%</td></tr>
+          <tr><td class="p-2">Stop Loss</td><td class="p-2" colspan="4">${stopLoss} pips</td></tr>
+          <tr><td class="p-2">Pip Value</td><td class="p-2" colspan="4">$${pipValue.toFixed(2)}</td></tr>
+          <tr><td class="p-2">RR Ratio</td><td class="p-2" colspan="4">${rrRatio.toFixed(1)}</td></tr>
+          <tr><td class="p-2">Max Trades</td><td class="p-2" colspan="4">${maxTrades}</td></tr>
+        `;
 
-      const lotSize = (capital * riskPercent) / (stopLoss * pipValue);
-      session = {
-        active: true,
-        mode: 'martingale',
-        capital,
-        currentCapital: capital,
-        riskPercent,
-        stopLoss,
-        pipValue,
-        rrRatio,
-        lotSize,
-        step: 0,
-        multiplier: 1,
-        maxTrades,
-      };
-      sessionStorage.setItem('forexSession', JSON.stringify(session));
-      startSessionMartingale.classList.add('hidden');
-      endSessionMartingale.classList.remove('hidden');
-      newSessionBtn.classList.add('hidden');
-      tradeHistory = [];
-      localStorage.setItem('forexTradeHistory', JSON.stringify(tradeHistory));
-      updateBalance();
-      showNextTrade();
-    });
+        const lotSize = (capital * riskPercent) / (stopLoss * pipValue);
+        session = {
+          active: true,
+          mode,
+          capital,
+          currentCapital: capital,
+          riskPercent,
+          stopLoss,
+          pipValue,
+          rrRatio,
+          lotSize,
+          step: 0,
+          multiplier: 1,
+          maxTrades,
+        };
+        sessionStorage.setItem('forexSession', JSON.stringify(session));
+        document.getElementById(`start-session-${mode}`).classList.add('hidden');
+        document.getElementById(`end-session-${mode}`).classList.remove('hidden');
+        tradeHistory = [];
+        localStorage.setItem('forexTradeHistory', JSON.stringify(tradeHistory));
+        updateCharts();
+        showNextTrade();
+      });
 
-    endSessionFixed.addEventListener('click', endSession);
-    endSessionMartingale.addEventListener('click', endSession);
+      document.getElementById(`end-session-${mode}`).addEventListener('click', () => endSession('Session ended manually.', 'info'));
+    }
 
-    newSessionBtn.addEventListener('click', () => {
-      session = { active: false };
-      sessionStorage.setItem('forexSession', JSON.stringify(session));
-      newSessionBtn.classList.add('hidden');
-      startSessionFixed.classList.remove('hidden');
-      startSessionMartingale.classList.remove('hidden');
-      tradePlanTable.innerHTML = '';
-      balanceWindow.classList.add('hidden');
-      alertsDiv.innerHTML = '';
-      gifContainer.style.display = 'none';
-      tradeHistory = [];
-      localStorage.setItem('forexTradeHistory', JSON.stringify(tradeHistory));
+    window.onload = () => {
+      showModeSelection();
+      updateNPC();
       updateCharts();
-    });
-
-    updateCharts();
+      typeText(storyWindow, 'SELECT A MODE TO BEGIN');
+    };
   </script>
 </body>
 </html>
