@@ -9,15 +9,13 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.waves.min.js"></script>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-PHGNH39ML0"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-PHGNH39ML0');
-</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PHGNH39ML0"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-PHGNH39ML0');
+  </script>
   <style>
     :root {
       --primary: #ff0000;
@@ -53,6 +51,29 @@
       height: 100%;
       z-index: -1;
     }
+    .announcement-bar {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+      text-align: center;
+      padding: 0.8rem;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 11;
+      font-size: 1rem;
+      font-weight: 600;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .announcement-text {
+      display: inline-block;
+      padding-left: 100%;
+      animation: marquee 15s linear infinite;
+    }
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
     header {
       background: rgba(0, 0, 0, 0.9);
       padding: 0.6rem 0.8rem;
@@ -62,6 +83,7 @@
       position: fixed;
       width: 100%;
       z-index: 10;
+      top: 48px;
       backdrop-filter: blur(8px);
     }
     .logo {
@@ -140,7 +162,7 @@
       display: block;
     }
     .courses-section {
-      padding: 6rem 1rem 3rem;
+      padding: 8rem 1rem 3rem;
       text-align: center;
       min-height: 100vh;
       position: relative;
@@ -523,7 +545,12 @@
       transform: scale(1.2);
     }
     @media (max-width: 768px) {
+      .announcement-bar {
+        font-size: 0.9rem;
+        padding: 0.6rem;
+      }
       header {
+        top: 40px;
         padding: 0.6rem 0.8rem;
       }
       .logo {
@@ -536,7 +563,7 @@
         display: block;
       }
       .courses-section {
-        padding: 4rem 0.8rem 2rem;
+        padding: 6rem 0.8rem 2rem;
       }
       .section-title {
         font-size: 2rem;
@@ -572,6 +599,9 @@
   </style>
 </head>
 <body>
+  <div class="announcement-bar">
+    <span class="announcement-text">🎉 Dr. Grand's Course Now Available! contact us on telegram or discord for Details! 🎉</span>
+  </div>
   <div class="vanta-bg"></div>
   <audio id="background-music" loop>
     <source src="pics/dreams.mp3" type="audio/mpeg">
@@ -902,7 +932,7 @@
     setTimeout(type, 1000);
 
     // Telegram Link Generator
-    const telegramUsername = 'Rey128989_bot'; // Replace with your Telegram username
+    const telegramUsername = 'Rey128989_bot';
     function generateTelegramLink(item, action, price) {
       const actionText = action === 'access' ? 'access' : 'purchase';
       const message = `I want to ${actionText} ${item} (${price})`;
